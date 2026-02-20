@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Terminal, Database, Shield, Zap, ChevronRight } from 'lucide-react';
+import { Database, Shield, Zap, ChevronRight, Github, Code2, Network } from 'lucide-react';
 import React from 'react';
 import Image from 'next/image';
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -115,9 +115,10 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--background)] via-transparent to-[var(--background)] z-10 w-full pointer-events-none"></div>
           <div className="flex gap-4 font-mono text-sm tracking-wider w-max animate-marquee">
             {/* Double the logs for seamless looping */}
-            {Array.from({ length: 3 }).fill(agentLogs).flat().map((log: any, i: number) => {
-              const isMatch = log.includes("harmony") || log.includes("shortlisted") || log.includes("cached");
-              const isReject = log.includes("terminating");
+            {Array.from({ length: 3 }).fill(agentLogs).flat().map((log: unknown, i: number) => {
+              const text = log as string;
+              const isMatch = text.includes("harmony") || text.includes("shortlisted") || text.includes("cached");
+              const isReject = text.includes("terminating");
               const bgClass = isMatch ? 'bg-alter-green' : isReject ? 'bg-alter-red' : 'bg-alter-amber';
               const textClass = isMatch ? 'text-alter-green' : isReject ? 'text-alter-red' : 'text-alter-amber';
 
@@ -125,7 +126,7 @@ export default function Home() {
                 <div key={i} className="flex items-center gap-3 px-8 text-black/60 dark:text-white/60 whitespace-nowrap">
                   <span className="text-black/20 dark:text-white/20">&gt;</span>
                   <span className={`${bgClass} w-2 h-2 rounded-full animate-pulse opacity-80`}></span>
-                  <span className={textClass}>{log}</span>
+                  <span className={textClass}>{text}</span>
                 </div>
               )
             })}
@@ -193,6 +194,62 @@ export default function Home() {
               </div>
             </motion.div>
 
+          </div>
+        </section>
+
+        {/* The Alter Protocol Tease */}
+        <section className="mb-40 relative z-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-alter-purple/5 to-transparent rounded-[3rem] -z-10"></div>
+
+          <div className="glass rounded-[3rem] p-8 md:p-16 border border-black/10 dark:border-white/10 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-alter-purple to-transparent opacity-50"></div>
+            <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-alter-lightpurple/20 blur-[100px] rounded-full"></div>
+
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-black/60 dark:text-white/60 text-sm font-medium mb-8">
+                <Network size={14} className="text-alter-purple" />
+                The Future of Connection
+              </div>
+
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+                The Universal <span className="text-transparent bg-clip-text bg-gradient-to-r from-alter-purple to-alter-lightpurple">Orchestration</span> Layer.
+              </h2>
+
+              <p className="text-black/60 dark:text-white/60 text-lg md:text-xl leading-relaxed mb-10">
+                While Alter is optimized for romance today, the underlying mathematics of vector similarity apply to any human connection. Friends, co-founders, investors, or collaborators.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left mb-12">
+                <div className="p-6 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 hover:border-alter-purple/30 transition-colors">
+                  <Code2 className="w-6 h-6 text-alter-lightpurple mb-4" />
+                  <h4 className="font-semibold text-lg mb-2">Open Intelligence</h4>
+                  <p className="text-sm text-black/60 dark:text-white/60 leading-relaxed">
+                    The core matching architecture—including scoring weights, prompt structures, and constraint penalties—will be open-sourced.
+                  </p>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 hover:border-alter-green/30 transition-colors">
+                  <Database className="w-6 h-6 text-alter-green mb-4" />
+                  <h4 className="font-semibold text-lg mb-2">Bring Your Own Engine</h4>
+                  <p className="text-sm text-black/60 dark:text-white/60 leading-relaxed">
+                    Wrap ChatGPT, Gemini, or point to a local LLaMA instance. You own the inference engine that processes your relationships.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a
+                  href="https://adidshaft.github.io/alter-docs/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-medium hover:scale-105 transition-transform"
+                >
+                  <Github size={20} />
+                  Algorithm Documentation
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
