@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ChevronRight, HeartHandshake, Shield, Sparkles } from 'lucide-react';
+import { ChevronRight, HeartHandshake, Shield, Sparkles, Network, Plus } from 'lucide-react';
 import React from 'react';
 import Image from 'next/image';
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -201,6 +201,102 @@ export default function Home() {
             Alter only does what is needed. Your data stays strictly between you and your Agent. No swiping. No public profiles. No meaningless small talk. Just deep, verified connections delivered when the time is right.
           </p>
         </section>
+
+        {/* The Vision Tease: Beyond Romance */}
+        <section className="mb-40 relative z-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-alter-purple/5 to-transparent rounded-[3rem] -z-10"></div>
+
+          <div className="glass rounded-[3rem] p-8 md:p-16 border border-black/10 dark:border-white/10 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-alter-purple to-transparent opacity-50"></div>
+            <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-alter-lightpurple/20 blur-[100px] rounded-full"></div>
+
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-black/60 dark:text-white/60 text-sm font-medium mb-8">
+                <Network size={14} className="text-alter-purple" />
+                The Future of Connection
+              </div>
+
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+                Not just for <span className="text-transparent bg-clip-text bg-gradient-to-r from-alter-purple to-alter-lightpurple">romance</span>.
+              </h2>
+
+              <p className="text-black/60 dark:text-white/60 text-lg md:text-xl leading-relaxed mb-10">
+                While Alter is currently optimized for finding your life partner, the underlying matching engine is built to understand human connection. Soon, your Agent will be able to scout for friends, co-founders, and collaborators with the same precision.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mb-40 relative z-10 max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">How it works.</h2>
+            <p className="text-black/50 dark:text-white/50 text-lg">Common questions about the Alter experience.</p>
+          </div>
+
+          <div className="space-y-4">
+            {/* FAQ 1 */}
+            <details className="group glass rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden open:border-alter-purple/30 transition-colors duration-300">
+              <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-lg hover:text-alter-purple transition-colors">
+                Is my data actually private?
+                <Plus className="w-5 h-5 text-black/40 dark:text-white/40 group-open:rotate-45 group-open:text-alter-purple transition-transform duration-300" />
+              </summary>
+              <div className="px-6 pb-6 text-black/60 dark:text-white/60 leading-relaxed text-sm">
+                Yes. Unlike traditional apps that host public profiles for the world to see, Alter has zero public-facing content. Your highly personal onboarding and interactions are processed securely on your device. The global network only exchanges encrypted representations of your &quot;vibe&quot;.
+              </div>
+            </details>
+
+            {/* FAQ 2 */}
+            <details className="group glass rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden open:border-alter-purple/30 transition-colors duration-300">
+              <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-lg hover:text-alter-purple transition-colors">
+                Do I have to chat with an AI every day?
+                <Plus className="w-5 h-5 text-black/40 dark:text-white/40 group-open:rotate-45 group-open:text-alter-purple transition-transform duration-300" />
+              </summary>
+              <div className="px-6 pb-6 text-black/60 dark:text-white/60 leading-relaxed text-sm">
+                Only once. During onboarding, you spend 5 minutes speaking to the AI so it can learn your personality, tone, and dealbreakers. After that, your Agent goes into the wild and scouts for you in the background. You only open the app when a highly compatible human match is found.
+              </div>
+            </details>
+
+            {/* FAQ 3 */}
+            <details className="group glass rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden open:border-alter-purple/30 transition-colors duration-300">
+              <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-lg hover:text-alter-purple transition-colors">
+                How does the compatibility matching actually work?
+                <Plus className="w-5 h-5 text-black/40 dark:text-white/40 group-open:rotate-45 group-open:text-alter-purple transition-transform duration-300" />
+              </summary>
+              <div className="px-6 pb-6 text-black/60 dark:text-white/60 leading-relaxed text-sm">
+                The Alter Matchmaker uses a proprietary orchestration model. We fuse high-dimensional semantic analysis (personality, aesthetics, tone) with deep relational algorithms. The exact weighting mechanism is continuously learning based on what makes a successful, long-lasting connection.
+              </div>
+            </details>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="mb-20 text-center">
+          <h2 className="text-4xl font-bold tracking-tight mb-8">Ready to stop swiping?</h2>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#" className="inline-block hover:opacity-80 transition-opacity">
+              <Image
+                src="/images/app-store-badge.svg"
+                alt="Download on the App Store"
+                width={150}
+                height={50}
+                className="h-[50px] w-auto"
+              />
+            </a>
+            <div className="flex w-full sm:w-auto relative max-w-xs">
+              <input
+                type="email"
+                placeholder="Join the Waitlist..."
+                className="w-full px-6 py-4 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/30 focus:outline-none focus:border-alter-purple transition-colors"
+              />
+              <button className="absolute right-2 top-2 bottom-2 p-2 bg-alter-purple rounded-full hover:bg-alter-lightpurple transition-colors">
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {/* Footer */}
