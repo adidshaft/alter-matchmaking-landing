@@ -286,11 +286,11 @@ export default function Home() {
             {/* FAQ 3 */}
             <details className="group glass rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden open:border-alter-purple/30 transition-colors duration-300">
               <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-lg hover:text-alter-purple transition-colors">
-                How does the Vedic astrology scoring work?
+                How does the compatibility scoring work?
                 <Plus className="w-5 h-5 text-black/40 dark:text-white/40 group-open:rotate-45 group-open:text-alter-purple transition-transform duration-300" />
               </summary>
               <div className="px-6 pb-6 text-black/60 dark:text-white/60 leading-relaxed text-sm">
-                The Alter Matchmaker evaluates candidates using a hybrid formula: 65% cosine vector similarity (personality, aesthetics, text) and 35% Vedic astrology (Guna Milan, Nakshatra, and Kuta computations). This maps ancient deterministic compatibility onto modern LLM-driven vibe analysis.
+                The Alter Matchmaker uses a multi-dimensional, proprietary orchestration model. We fuse high-dimensional semantic vectors (personality, aesthetics, tone) with deep relational algorithms. The exact weighting mechanism is constantly evolving through continuous reinforcement learning, ensuring that every connection your agent brings you is statistically significant.
               </div>
             </details>
           </div>
