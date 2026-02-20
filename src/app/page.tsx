@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Database, Shield, Zap, ChevronRight, Github, Code2, Network, Plus, Rocket } from 'lucide-react';
+import { Database, Shield, Zap, ChevronRight, Github, Code2, Network, Plus, Rocket, BrainCircuit, MessageSquare } from 'lucide-react';
 import React from 'react';
 import Image from 'next/image';
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -9,8 +9,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 const agentLogs = [
   "Agent 004 terminating connection: Vibe mismatch detected (< 85% scalar).",
   "Agent 092 validating a 98% vector harmony. Initiating handshake...",
-  "Agent 011 negotiating hard boundaries on continuous ping rates.",
-  "Agent 077 executing RAG pipeline for aesthetic mapping.",
+  "> [SYS] Executing stateless 5-turn Gemini extraction pipeline.",
+  "> [SYS] Injecting 3 user memories via RAG into negotiation context.",
   "Agent 042 cached a potential high-value node for 11:11 PM.",
 ];
 
@@ -170,7 +170,35 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Box 3: Privacy via Local Caching */}
+            {/* Box 3: Dynamic Multimodal Onboarding */}
+            <motion.div
+              whileHover={{ y: -5 }}
+              className="glass rounded-3xl p-10 md:col-span-2 relative overflow-hidden group"
+            >
+              <div className="absolute top-0 left-0 w-64 h-64 bg-alter-purple/10 rounded-full blur-[60px] -ml-20 -mt-20 group-hover:bg-alter-purple/20 transition-colors"></div>
+              <MessageSquare className="w-10 h-10 text-alter-purple mb-6" />
+              <h3 className="text-2xl font-semibold mb-3">Dynamic Multimodal Onboarding</h3>
+              <p className="text-black/60 dark:text-white/60 leading-relaxed max-w-md">
+                A stateless, 5-turn extraction pipeline powered by Gemini 2.5 Pro. It dynamically probes your core beliefs and intimacy needs through highly contextual audio conversation, generating a continuous JSON identity representation without storing plaintext logs.
+              </p>
+            </motion.div>
+
+            {/* Box 4: RAG Memory Vault */}
+            <motion.div
+              whileHover={{ y: -5 }}
+              className="glass rounded-3xl p-10 relative overflow-hidden group flex flex-col justify-between"
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-alter-green/10 rounded-full blur-[40px] group-hover:bg-alter-green/20 transition-colors"></div>
+              <div>
+                <BrainCircuit className="w-10 h-10 text-alter-green mb-6 relative z-10" />
+                <h3 className="text-xl font-semibold mb-3 relative z-10">RAG Memory Vault</h3>
+                <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed relative z-10">
+                  Embed ephemeral thoughts directly into your agent&apos;s vector space. Top-k relevant memories are retrieved via cosine similarity and injected into the negotiation prompt context.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Box 5: Privacy via Local Caching */}
             <motion.div
               whileHover={{ y: -5 }}
               className="glass rounded-3xl p-10 relative overflow-hidden group md:col-span-3 min-h-[300px] flex flex-col md:flex-row items-center gap-10"
