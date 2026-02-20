@@ -19,19 +19,27 @@ export default function Home() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-white font-sans overflow-hidden">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans overflow-hidden transition-colors duration-500">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 p-6 flex justify-between items-center glass border-b-0 rounded-none bg-black/20 backdrop-blur-xl">
+      <nav className="fixed top-0 w-full z-50 p-6 flex justify-between items-center glass border-b-0 rounded-none bg-black/5 dark:bg-black/20 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <Image
-            src="/images/logo.png"
+            src="/images/logo-light.png"
             alt="Alter Logo"
             width={40}
             height={40}
-            className="rounded-xl drop-shadow-[0_0_10px_rgba(115,69,230,0.5)]"
+            className="rounded-xl drop-shadow-[0_0_10px_rgba(255,191,51,0.5)] dark:hidden block"
+          />
+          <Image
+            src="/images/logo-dark.png"
+            alt="Alter Logo"
+            width={40}
+            height={40}
+            className="rounded-xl drop-shadow-[0_0_10px_rgba(115,69,230,0.5)] hidden dark:block"
           />
           <span className="font-bold text-xl tracking-tight">Alter</span>
         </div>
+        <ThemeToggle />
       </nav>
 
       <main className="relative pt-32 pb-20 px-6 max-w-7xl mx-auto">
@@ -57,8 +65,8 @@ export default function Home() {
               <span className="px-4 py-1.5 rounded-full border border-alter-purple/30 bg-alter-purple/10 text-alter-lightpurple text-sm font-medium tracking-wide mb-6 inline-block">
                 iOS Exclusive
               </span>
-              <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-                Stop swiping. Let your <span className="text-alter-lightpurple">Agent</span> do the scouting.
+              <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-b from-black to-black/60 dark:from-white dark:to-white/60">
+                Stop swiping. Let your <span className="text-alter-purple dark:text-alter-lightpurple">Agent</span> do the scouting.
               </h1>
             </motion.div>
 
@@ -66,7 +74,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl md:text-2xl text-white/50 max-w-2xl mx-auto"
+              className="text-xl md:text-2xl text-black/50 dark:text-white/50 max-w-2xl mx-auto"
             >
               The AI matchmaking app for those who are tired of the game. Your Agent goes out into the wild to find people who fit you perfectly.
             </motion.p>
@@ -90,7 +98,7 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="Join the Waitlist..."
-                  className="w-full px-6 py-4 rounded-full bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-alter-purple transition-colors"
+                  className="w-full px-6 py-4 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/30 focus:outline-none focus:border-alter-purple transition-colors"
                 />
                 <button className="absolute right-2 top-2 bottom-2 p-2 bg-alter-purple rounded-full hover:bg-alter-lightpurple transition-colors">
                   <ChevronRight size={20} />
