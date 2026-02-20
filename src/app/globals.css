@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-alter-bg: #0D0A1A;
+  --color-alter-bg: var(--background);
   --color-alter-purple: #7345E6;
   --color-alter-lightpurple: #A673FF;
   --color-alter-deeppurple: #331A66;
@@ -10,18 +10,34 @@
   --color-alter-amber: #FFBF33;
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
-  
+
   --animate-marquee: marquee 35s linear infinite;
 
   @keyframes marquee {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-100%); }
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
   }
 }
 
 :root {
+  --background: #f8f9fa;
+  --foreground: #171717;
+  --glass: rgb(255 255 255 / 0.7);
+  --border: rgb(0 0 0 / 0.1);
+  --glass-hover: rgb(255 255 255 / 0.9);
+}
+
+.dark {
   --background: #0D0A1A;
   --foreground: #ededed;
+  --glass: rgb(255 255 255 / 0.05);
+  --border: rgb(255 255 255 / 0.1);
+  --glass-hover: rgb(255 255 255 / 0.1);
 }
 
 body {
@@ -33,7 +49,7 @@ body {
 
 /* Glassmorphism utilities */
 @utility glass {
-  background-color: rgb(255 255 255 / 0.05);
-  border: 1px solid rgb(255 255 255 / 0.1);
+  background-color: var(--glass);
+  border: 1px solid var(--border);
   backdrop-filter: blur(12px);
 }

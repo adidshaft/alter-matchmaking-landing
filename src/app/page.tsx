@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronRight, HeartHandshake, Shield, Sparkles } from 'lucide-react';
 import React from 'react';
 import Image from 'next/image';
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const agentLogs = [
   "Agent 004 rejected a match: Vibe mismatch.",
@@ -110,8 +111,8 @@ export default function Home() {
               const color = isMatch ? 'text-alter-green' : isReject ? 'text-alter-red' : 'text-alter-amber';
 
               return (
-                <div key={i} className="flex items-center gap-3 px-8 text-white/60 whitespace-nowrap">
-                  <span className="text-white/20">&gt;</span>
+                <div key={i} className="flex items-center gap-3 px-8 text-black/60 dark:text-white/60 whitespace-nowrap">
+                  <span className="text-black/20 dark:text-white/20">&gt;</span>
                   <span className={`${color} w-2 h-2 rounded-full animate-pulse`}></span>
                   <span>{log}</span>
                 </div>
@@ -124,7 +125,7 @@ export default function Home() {
         <section className="mb-40">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold tracking-tight mb-4">How Alter Works</h2>
-            <p className="text-white/50 text-lg">Intuitive, precise, and completely hands-off.</p>
+            <p className="text-black/50 dark:text-white/50 text-lg">Intuitive, precise, and completely hands-off.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -137,7 +138,7 @@ export default function Home() {
               <div className="absolute top-0 right-0 w-64 h-64 bg-alter-lightpurple/10 rounded-full blur-[60px] -mr-20 -mt-20 group-hover:bg-alter-lightpurple/20 transition-colors"></div>
               <Sparkles className="w-10 h-10 text-alter-purple mb-6" />
               <h3 className="text-2xl font-semibold mb-3">The Audio Interview</h3>
-              <p className="text-white/60 leading-relaxed max-w-md">
+              <p className="text-black/60 dark:text-white/60 leading-relaxed max-w-md">
                 No bios to write. Simply talk to your AI in a natural, voice-first interview. The system learns your essence, your tone, and what truly matters to you.
               </p>
             </motion.div>
@@ -148,11 +149,11 @@ export default function Home() {
               className="glass rounded-3xl p-10 relative overflow-hidden group"
             >
               <div className="absolute bottom-0 right-0 w-32 h-32 bg-alter-amber/10 rounded-full blur-[40px] group-hover:bg-alter-amber/20 transition-colors"></div>
-              <div className="w-10 h-10 rounded-full bg-alter-amber/20 flex items-center justify-center text-alter-amber mb-6 font-mono text-sm border border-alter-amber/30">
+              <div className="w-10 h-10 rounded-full bg-alter-amber/10 dark:bg-alter-amber/20 flex items-center justify-center text-alter-amber mb-6 font-mono text-sm border border-alter-amber/30">
                 {`{}`}
               </div>
               <h3 className="text-xl font-semibold mb-3">The AI Dossier</h3>
-              <p className="text-white/60 text-sm leading-relaxed">
+              <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed">
                 Your voice and photos are transformed into a high-dimensional persona. This encrypted dossier represents you in the matchmaking ecosystem.
               </p>
             </motion.div>
@@ -166,14 +167,14 @@ export default function Home() {
               <div className="flex-1 relative z-10">
                 <HeartHandshake className="w-10 h-10 text-alter-green mb-6" />
                 <h3 className="text-3xl font-semibold mb-4">The 11:11 PM Ritual</h3>
-                <p className="text-white/60 text-lg leading-relaxed max-w-2xl">
+                <p className="text-black/60 dark:text-white/60 text-lg leading-relaxed max-w-2xl">
                   Every night at exactly 11:11 PM, the matching engine activates. Agents negotiate based on your strict boundaries and deep preferences. If a perfect harmony is found, you wake up to a curated match.
                 </p>
               </div>
 
               {/* Visual Representation of two agents */}
               <div className="flex-shrink-0 flex items-center gap-4 relative z-10 w-full md:w-auto justify-center">
-                <div className="w-20 h-20 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm flex items-center justify-center font-mono text-white/40">YOU</div>
+                <div className="w-20 h-20 rounded-full border border-black/10 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-sm flex items-center justify-center font-mono text-black/50 dark:text-white/40">YOU</div>
                 <div className="w-12 h-[1px] bg-gradient-to-r from-alter-purple/0 via-alter-purple to-alter-purple/0 relative">
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-alter-purple rounded-full blur-[2px]"></div>
                 </div>
@@ -186,16 +187,16 @@ export default function Home() {
 
         {/* Privacy Section */}
         <section className="text-center max-w-2xl mx-auto py-20 pb-32">
-          <Shield className="w-12 h-12 mx-auto text-white/30 mb-6" />
+          <Shield className="w-12 h-12 mx-auto text-black/30 dark:text-white/30 mb-6" />
           <h2 className="text-3xl font-semibold mb-6">Designed for Privacy & Intuition</h2>
-          <p className="text-white/50 text-lg leading-relaxed">
+          <p className="text-black/50 dark:text-white/50 text-lg leading-relaxed">
             Alter only does what is needed. Your data stays strictly between you and your Agent. No swiping. No public profiles. No meaningless small talk. Just deep, verified connections delivered when the time is right.
           </p>
         </section>
       </main>
 
-      {/* Dark Footer */}
-      <footer className="border-t border-white/5 py-10 text-center text-white/30 text-sm font-mono">
+      {/* Footer */}
+      <footer className="border-t border-black/10 dark:border-white/5 py-10 text-center text-black/40 dark:text-white/30 text-sm font-mono">
         <p>© 2026 Alter Matchmaking. iOS Exclusive.</p>
       </footer>
     </div>
