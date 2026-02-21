@@ -5,6 +5,10 @@ import { ChevronRight, HeartHandshake, Shield, Sparkles, Network, Plus, BrainCir
 import React from 'react';
 import Image from 'next/image';
 import { ThemeToggle } from "@/components/theme-toggle";
+import dynamic from 'next/dynamic';
+import { AgentNetwork } from '@/components/agent-network';
+
+const WaitlistForm = dynamic(() => import('@/components/waitlist-form').then(mod => mod.WaitlistForm), { ssr: false });
 
 const agentLogs = [
   "Agent 004 rejected a match: Vibe mismatch.",
@@ -46,6 +50,7 @@ export default function Home() {
 
         {/* Hero Section */}
         <section className="relative flex flex-col items-center justify-center min-h-[80vh] text-center">
+          <AgentNetwork />
 
           {/* Framer Motion Pulsing Orb */}
           <motion.div
@@ -65,8 +70,9 @@ export default function Home() {
               <span className="px-4 py-1.5 rounded-full border border-alter-purple/30 bg-alter-purple/10 text-alter-lightpurple text-sm font-medium tracking-wide mb-6 inline-block">
                 iOS Exclusive
               </span>
-              <h1 className="text-6xl md:text-8xl font-bold tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-b from-black to-black/60 dark:from-white dark:to-white/60">
-                Stop swiping. Let your <span className="text-alter-purple dark:text-alter-lightpurple">Agent</span> do the scouting.
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-b from-black to-black/60 dark:from-white dark:to-white/60">
+                Stop swiping. <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-alter-purple to-alter-lightpurple">Let your AI Agent find The One.</span>
               </h1>
             </motion.div>
 
@@ -74,37 +80,95 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl md:text-2xl text-black/50 dark:text-white/50 max-w-2xl mx-auto"
+              className="text-lg md:text-xl text-black/50 dark:text-white/50 max-w-2xl mx-auto"
             >
-              The AI matchmaking app for those who are tired of the game. Your Agent goes out into the wild to find people who fit you perfectly.
+              Dating apps make you do all the work. Alter does it for you. We create a highly intuitive AI Agent that understands your deepest values. While you live your life, your Agent goes out into the digital world, goes on thousands of &quot;micro-dates&quot; with other agents, and only introduces you to a real human when an undeniable, profound connection is found.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8"
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 z-10"
             >
-              <a href="#" className="inline-block hover:opacity-80 transition-opacity">
-                <Image
-                  src="/images/app-store-badge.svg"
-                  alt="Download on the App Store"
-                  width={150}
-                  height={50}
-                  className="h-[50px] w-auto"
-                />
-              </a>
-              <div className="flex w-full sm:w-auto relative max-w-xs">
-                <input
-                  type="email"
-                  placeholder="Join the Waitlist..."
-                  className="w-full px-6 py-4 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/30 focus:outline-none focus:border-alter-purple transition-colors"
-                />
-                <button className="absolute right-2 top-2 bottom-2 p-2 bg-alter-purple rounded-full hover:bg-alter-lightpurple transition-colors">
-                  <ChevronRight size={20} />
-                </button>
+              <div className="relative group inline-block">
+                <a href="#" className="inline-block hover:opacity-80 transition-opacity">
+                  <Image
+                    src="/images/app-store-badge.svg"
+                    alt="Download on the App Store"
+                    width={150}
+                    height={50}
+                    className="h-[50px] w-auto"
+                  />
+                </a>
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 min-w-max px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
+                  Soon available for Waitlisted Users
+                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black dark:bg-white rotate-45"></div>
+                </div>
               </div>
+              <WaitlistForm />
             </motion.div>
+          </div>
+        </section>
+
+        {/* The Problem vs The Solution - NEW SECTION */}
+        <section className="py-20 -mx-6 px-6 relative z-20">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+
+              {/* The Old Way */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="glass rounded-[2rem] p-8 md:p-10 border border-black/5 dark:border-white/5 relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 dark:bg-white/5 rounded-full blur-[40px] -mr-10 -mt-10"></div>
+                <h3 className="text-xl font-mono text-black/40 dark:text-white/40 mb-6 uppercase tracking-widest">You Do The Work</h3>
+                <ul className="space-y-4 text-black/60 dark:text-white/60 text-lg leading-relaxed mix-blend-luminosity">
+                  <li className="flex items-start gap-3">
+                    <span className="opacity-50 mt-1">✕</span>
+                    You spend hours swiping on superficial text profiles.
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="opacity-50 mt-1">✕</span>
+                    You suffer through exhausting, repetitive small talk.
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="opacity-50 mt-1">✕</span>
+                    You waste weeks dating someone only to discover a core dealbreaker.
+                  </li>
+                </ul>
+              </motion.div>
+
+              {/* The Alter Way */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="glass rounded-[2rem] p-8 md:p-10 border border-alter-purple/20 bg-alter-purple/5 relative overflow-hidden shadow-[0_0_40px_rgba(115,69,230,0.1)]"
+              >
+                <div className="absolute bottom-0 right-0 w-48 h-48 bg-alter-purple/10 rounded-full blur-[50px]"></div>
+                <h3 className="text-xl font-mono text-alter-purple dark:text-alter-lightpurple mb-6 uppercase tracking-widest font-semibold">Your Agent Does The Work</h3>
+                <ul className="space-y-4 text-black/80 dark:text-white/80 text-lg leading-relaxed relative z-10">
+                  <li className="flex items-start gap-3">
+                    <span className="text-alter-purple mt-1">✓</span>
+                    <strong>Your Agent Scouts:</strong> It works 24/7 in the background while you focus on your life.
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-alter-purple mt-1">✓</span>
+                    <strong>Your Agent Vets:</strong> It ruthlessly filters candidates against your specific dealbreakers.
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-alter-purple mt-1">✓</span>
+                    <strong>Your Agent Delivers:</strong> Wake up to a curated match and a transcript showing exactly why you align.
+                  </li>
+                </ul>
+              </motion.div>
+
+            </div>
           </div>
         </section>
 
@@ -132,8 +196,8 @@ export default function Home() {
         {/* Feature Bento Box */}
         <section className="mb-40">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold tracking-tight mb-4">How Alter Works</h2>
-            <p className="text-black/50 dark:text-white/50 text-lg">Intuitive, precise, and completely hands-off.</p>
+            <h2 className="text-4xl font-bold tracking-tight mb-4">How Your Agent Works</h2>
+            <p className="text-black/50 dark:text-white/50 text-lg">It learns you. It searches for you. It matches you.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -145,9 +209,9 @@ export default function Home() {
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-alter-lightpurple/10 rounded-full blur-[60px] -mr-20 -mt-20 group-hover:bg-alter-lightpurple/20 transition-colors"></div>
               <Sparkles className="w-10 h-10 text-alter-purple mb-6" />
-              <h3 className="text-2xl font-semibold mb-3">Dynamic Interview</h3>
+              <h3 className="text-2xl font-semibold mb-3">Step 1: Train Your Agent</h3>
               <p className="text-black/60 dark:text-white/60 leading-relaxed text-sm">
-                No bios to write. Have a fluid, two-way voice conversation with your Agent. It learns your core beliefs, daily habits, and intimacy needs all by itself.
+                <strong>Have a fluid, two-way voice conversation.</strong> It naturally extracts your core beliefs, daily habits, and dealbreakers to build your personal matchmaker.
               </p>
             </motion.div>
 
@@ -160,9 +224,9 @@ export default function Home() {
               <div className="w-10 h-10 rounded-full bg-alter-amber/10 dark:bg-alter-amber/20 flex items-center justify-center text-alter-amber mb-6 font-mono text-sm border border-alter-amber/30">
                 {`{}`}
               </div>
-              <h3 className="text-xl font-semibold mb-3">The AI Dossier</h3>
+              <h3 className="text-xl font-semibold mb-3">The Digital Persona</h3>
               <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed">
-                Your voice and photos are transformed into a high-dimensional persona. This encrypted dossier represents you in the matchmaking ecosystem.
+                Your voice and photos are instantly transformed into a high-dimensional persona. This encrypted dossier is what your Agent uses to negotiate in the ecosystem.
               </p>
             </motion.div>
 
@@ -173,9 +237,9 @@ export default function Home() {
             >
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-alter-green/10 rounded-full blur-[50px] group-hover:bg-alter-green/20 transition-colors"></div>
               <BrainCircuit className="w-10 h-10 text-alter-green mb-6 relative z-10" />
-              <h3 className="text-xl font-semibold mb-3 relative z-10">The Memory Vault</h3>
+              <h3 className="text-xl font-semibold mb-3 relative z-10">Step 2: Your Agent Scouts</h3>
               <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed relative z-10">
-                Humans are dynamic. Text your agent a stray thought, a new dealbreaker, or something you loved about a recent date. Your agent remembers it forever, constantly refining who it looks for.
+                <strong>It remembers your preferences forever.</strong> Text your agent a stray thought or a new dealbreaker, and it continuously refines who it looks for in the background.
               </p>
             </motion.div>
 
@@ -187,9 +251,9 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-r from-alter-purple/5 to-transparent"></div>
               <div className="flex-1 relative z-10">
                 <HeartHandshake className="w-10 h-10 text-alter-green mb-6" />
-                <h3 className="text-3xl font-semibold mb-4">The 11:11 PM Ritual</h3>
+                <h3 className="text-3xl font-semibold mb-4">Step 3: The Introduction</h3>
                 <p className="text-black/60 dark:text-white/60 text-lg leading-relaxed max-w-2xl">
-                  Every night at exactly 11:11 PM, the matching engine activates. Agents negotiate based on your strict boundaries and deep preferences. If a perfect harmony is found, you wake up to a curated match.
+                  <strong>Wake up to a perfect connection.</strong> Every night at 11:11 PM, the matching engine activates. Your Agent negotiates based on strict boundaries on your behalf. If a perfect harmony is found, it delivers a human match.
                 </p>
               </div>
 
@@ -263,11 +327,11 @@ export default function Home() {
             {/* FAQ 2 */}
             <details className="group glass rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden open:border-alter-purple/30 transition-colors duration-300">
               <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-lg hover:text-alter-purple transition-colors">
-                Do I have to chat with an AI every day?
+                Do I have to chat with my Agent every day?
                 <Plus className="w-5 h-5 text-black/40 dark:text-white/40 group-open:rotate-45 group-open:text-alter-purple transition-transform duration-300" />
               </summary>
               <div className="px-6 pb-6 text-black/60 dark:text-white/60 leading-relaxed text-sm">
-                Only once. During onboarding, you spend 5 minutes speaking to the AI so it can learn your personality, tone, and dealbreakers. After that, your Agent goes into the wild and scouts for you in the background. You only open the app when a highly compatible human match is found.
+                Only once. During onboarding, you spend 5 minutes speaking to your Agent so it can learn your personality. After that, your Agent becomes your personal matchmaker, scouting in the wild for you in the background. You only open the app when it finds a highly compatible human match.
               </div>
             </details>
 
@@ -288,25 +352,22 @@ export default function Home() {
         <section className="mb-20 text-center">
           <h2 className="text-4xl font-bold tracking-tight mb-8">Ready to stop swiping?</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="#" className="inline-block hover:opacity-80 transition-opacity">
-              <Image
-                src="/images/app-store-badge.svg"
-                alt="Download on the App Store"
-                width={150}
-                height={50}
-                className="h-[50px] w-auto"
-              />
-            </a>
-            <div className="flex w-full sm:w-auto relative max-w-xs">
-              <input
-                type="email"
-                placeholder="Join the Waitlist..."
-                className="w-full px-6 py-4 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/30 focus:outline-none focus:border-alter-purple transition-colors"
-              />
-              <button className="absolute right-2 top-2 bottom-2 p-2 bg-alter-purple rounded-full hover:bg-alter-lightpurple transition-colors">
-                <ChevronRight size={20} />
-              </button>
+            <div className="relative group inline-block">
+              <a href="#" className="inline-block hover:opacity-80 transition-opacity">
+                <Image
+                  src="/images/app-store-badge.svg"
+                  alt="Download on the App Store"
+                  width={150}
+                  height={50}
+                  className="h-[50px] w-auto"
+                />
+              </a>
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 min-w-max px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
+                Soon available for Waitlisted Users
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black dark:bg-white rotate-45"></div>
+              </div>
             </div>
+            <WaitlistForm />
           </div>
         </section>
 
