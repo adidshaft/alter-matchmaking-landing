@@ -3,18 +3,16 @@
 
 @theme {
   --color-alter-bg: var(--background);
-  --color-alter-purple: #7C3AED;
-  --color-alter-lightpurple: #C084FC;
-  --color-alter-deeppurple: #1E1B4B;
-  --color-alter-green: #10B981;
-  --color-alter-red: #EF4444;
-  --color-alter-amber: #F59E0B;
+  --color-alter-purple: #7345E6;
+  --color-alter-lightpurple: #A673FF;
+  --color-alter-deeppurple: #331A66;
+  --color-alter-green: #4DD980;
+  --color-alter-red: #FF4C4C;
+  --color-alter-amber: #FFBF33;
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
 
-  --animate-marquee: marquee 50s linear infinite;
-  --animate-orbit: orbit 60s linear infinite;
-  --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee: marquee 35s linear infinite;
 
   @keyframes marquee {
     0% {
@@ -25,46 +23,22 @@
       transform: translateX(-100%);
     }
   }
-
-  @keyframes orbit {
-    0% {
-      transform: rotate(0deg) translateY(-20px) rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg) translateY(-20px) rotate(-360deg);
-    }
-  }
-
-  @keyframes float {
-
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-20px);
-    }
-  }
 }
 
 :root {
-  --background: #FFFFFF;
-  --foreground: #09090B;
-  --glass: rgba(255, 255, 255, 0.6);
-  --border: rgba(0, 0, 0, 0.08);
-  --glass-hover: rgba(255, 255, 255, 0.8);
-  --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --background: #f8f9fa;
+  --foreground: #171717;
+  --glass: rgb(255 255 255 / 0.7);
+  --border: rgb(0 0 0 / 0.1);
+  --glass-hover: rgb(255 255 255 / 0.9);
 }
 
 .dark {
-  --background: #050505;
-  --foreground: #FAFAFA;
-  --glass: rgba(255, 255, 255, 0.02);
-  --border: rgba(255, 255, 255, 0.06);
-  --glass-hover: rgba(255, 255, 255, 0.04);
-  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  --background: #0D0A1A;
+  --foreground: #ededed;
+  --glass: rgb(255 255 255 / 0.05);
+  --border: rgb(255 255 255 / 0.1);
+  --glass-hover: rgb(255 255 255 / 0.1);
 }
 
 body {
@@ -72,55 +46,11 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
 }
 
+/* Glassmorphism utilities */
 @utility glass {
   background-color: var(--glass);
   border: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  box-shadow: var(--card-shadow);
-}
-
-@utility glass-card {
-  background: linear-gradient(135deg, var(--glass), rgba(255, 255, 255, 0.01));
-  border: 1px solid var(--border);
-  backdrop-filter: blur(20px);
-  box-shadow: var(--card-shadow);
-}
-
-@utility glow-purple {
-  box-shadow: 0 0 50px -12px var(--color-alter-purple);
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(124, 58, 237, 0.2);
-}
-
-/* Smooth reveal animations */
-.reveal-up {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: revealUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-@keyframes revealUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  backdrop-filter: blur(12px);
 }
