@@ -5,6 +5,7 @@ import { Database, Shield, Zap, ChevronRight, Github, Code2, Network, Plus, Rock
 import React from 'react';
 import Image from 'next/image';
 import { ThemeToggle } from "@/components/theme-toggle";
+import { WaitlistForm } from "@/components/waitlist-form";
 
 const agentLogs = [
   "Agent 004 terminating connection: Vibe mismatch detected (< 85% scalar).",
@@ -96,15 +97,8 @@ export default function Home() {
                   className="h-[50px] w-auto relative z-10"
                 />
               </a>
-              <div className="flex w-full sm:w-auto relative max-w-xs">
-                <input
-                  type="email"
-                  placeholder="Join the Waitlist..."
-                  className="w-full px-6 py-4 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/30 focus:outline-none focus:border-alter-purple transition-colors relative z-10"
-                />
-                <button className="absolute right-2 top-2 bottom-2 p-2 bg-alter-purple rounded-full hover:bg-alter-lightpurple transition-colors z-20">
-                  <ChevronRight size={20} className="text-white" />
-                </button>
+              <div className="flex w-full sm:w-auto relative max-w-xs justify-center items-center">
+                <WaitlistForm />
               </div>
             </motion.div>
           </div>
