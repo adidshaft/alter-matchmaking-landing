@@ -69,7 +69,7 @@ export default function Home() {
               </span>
               <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight font-sans">
                 Stop Swiping.<br />
-                Let Your <span className="text-alter-purple dark:text-alter-lightpurple">Agent</span> Do The Work.
+                So We Built An <span className="text-alter-purple dark:text-alter-lightpurple">AI Agent</span> That Does It For You.
               </h1>
             </motion.div>
 
