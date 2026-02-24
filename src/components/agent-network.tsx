@@ -23,16 +23,20 @@ export function AgentNetwork() {
         const { clientWidth, clientHeight } = containerRef.current;
 
         // Reduce node count on smaller screens
-        const nodeCount = clientWidth < 768 ? 15 : 30;
+        const nodeCount = clientWidth < 768 ? 25 : 60;
 
-        const initialNodes = Array.from({ length: nodeCount }).map((_, i) => ({
-            id: i,
-            x: Math.random() * clientWidth,
-            y: Math.random() * clientHeight,
-            vx: (Math.random() - 0.5) * 0.5, // Slow drifting speed
-            vy: (Math.random() - 0.5) * 0.5,
-            size: Math.random() * 4 + 2, // Size between 2px and 6px
-        }));
+        const initialNodes = Array.from({ length: nodeCount }).map((_, i) => {
+            const isFast = Math.random() > 0.85;
+            const speedMultiplier = isFast ? 3.5 : 1;
+            return {
+                id: i,
+                x: Math.random() * clientWidth,
+                y: Math.random() * clientHeight,
+                vx: (Math.random() - 0.5) * 1.5 * speedMultiplier, // Faster drifting speed for "sick motions"
+                vy: (Math.random() - 0.5) * 1.5 * speedMultiplier,
+                size: Math.random() * 5 + 2, // Size between 2px and 7px
+            };
+        });
 
         setNodes(initialNodes);
     }, []);
@@ -113,10 +117,10 @@ export function AgentNetwork() {
                         height: node.size,
                         marginLeft: -node.size / 2,
                         marginTop: -node.size / 2,
-                        boxShadow: `0 0 ${node.size * 2}px var(--alter-purple)`,
+                        boxShadow: `0 0 ${node.size * 3}px var(--alter-purple)`,
                     }}
                     animate={{
-                        opacity: [0.3, 0.8, 0.3], // Subtle pulsing effect on the dots
+                        opacity: [0.2, 0.9, 0.2], // Subtle pulsing effect on the dots
                     }}
                     transition={{
                         duration: Math.random() * 3 + 2,

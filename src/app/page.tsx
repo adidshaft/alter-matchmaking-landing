@@ -7,6 +7,9 @@ import Image from 'next/image';
 import { ThemeToggle } from "@/components/theme-toggle";
 import dynamic from 'next/dynamic';
 import { AgentNetwork } from '@/components/agent-network';
+import { TrainingMockup } from '@/components/mockups/training-mockup';
+import { ScoutingMockup } from '@/components/mockups/scouting-mockup';
+import { RevealMockup } from '@/components/mockups/reveal-mockup';
 
 const WaitlistForm = dynamic(() => import('@/components/waitlist-form').then(mod => mod.WaitlistForm), { ssr: false });
 
@@ -318,14 +321,8 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="flex flex-col items-center gap-6"
             >
-              <div className="relative group p-4 glass rounded-[3rem] border border-black/5 dark:border-white/5 bg-white/5 backdrop-blur-3xl shadow-2xl transition hover:scale-[1.02] duration-500">
-                <Image
-                  src="/images/mockups/energy-orb.png"
-                  alt="Alter App - Training Agent"
-                  width={300}
-                  height={650}
-                  className="rounded-[2.2rem] shadow-2xl"
-                />
+              <div className="relative group p-4 -mx-4 md:mx-0">
+                <TrainingMockup delay={0.2} />
               </div>
               <div className="text-center space-y-2">
                 <h3 className="text-xl font-semibold">1. Deep Connection</h3>
@@ -343,14 +340,8 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="flex flex-col items-center gap-6 md:-mt-12"
             >
-              <div className="relative group p-4 glass rounded-[3rem] border border-alter-purple/20 bg-alter-purple/5 backdrop-blur-3xl shadow-[0_0_50px_rgba(115,69,230,0.15)] transition hover:scale-[1.02] duration-500">
-                <Image
-                  src="/images/mockups/agent-log.png"
-                  alt="Alter App - Agent Scouting Log"
-                  width={300}
-                  height={650}
-                  className="rounded-[2.2rem] shadow-2xl"
-                />
+              <div className="relative group p-4 -mx-4 md:mx-0">
+                <ScoutingMockup delay={0.4} />
               </div>
               <div className="text-center space-y-2">
                 <h3 className="text-xl font-semibold text-alter-purple">2. The Silent Search</h3>
@@ -368,14 +359,8 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col items-center gap-6"
             >
-              <div className="relative group p-4 glass rounded-[3rem] border border-black/5 dark:border-white/5 bg-white/5 backdrop-blur-3xl shadow-2xl transition hover:scale-[1.02] duration-500">
-                <Image
-                  src="/images/mockups/match-reveal.png"
-                  alt="Alter App - Match Reveal"
-                  width={300}
-                  height={650}
-                  className="rounded-[2.2rem] shadow-2xl"
-                />
+              <div className="relative group p-4 -mx-4 md:mx-0">
+                <RevealMockup delay={0.6} />
               </div>
               <div className="text-center space-y-2">
                 <h3 className="text-xl font-semibold">3. The Magical Reveal</h3>
