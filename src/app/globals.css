@@ -26,19 +26,22 @@
 }
 
 :root {
-  --background: #f8f9fa;
-  --foreground: #171717;
-  --glass: rgb(255 255 255 / 0.7);
-  --border: rgb(0 0 0 / 0.1);
-  --glass-hover: rgb(255 255 255 / 0.9);
+  --background: #FFFFFF;
+  /* Pristine Light */
+  --foreground: #0A0A0A;
+  --glass: rgb(255 255 255 / 0.8);
+  --border: rgb(0 0 0 / 0.05);
+  --glass-hover: rgb(255 255 255 / 0.95);
 }
 
 .dark {
-  --background: #0D0A1A;
-  --foreground: #ededed;
-  --glass: rgb(255 255 255 / 0.05);
-  --border: rgb(255 255 255 / 0.1);
-  --glass-hover: rgb(255 255 255 / 0.1);
+  --background: #03000A;
+  /* Cinematic Deep Black with a hint of purple */
+  --foreground: #F5F5F5;
+  --glass: rgb(15 10 30 / 0.5);
+  /* Dark tinted glass */
+  --border: rgb(255 255 255 / 0.08);
+  --glass-hover: rgb(25 15 45 / 0.6);
 }
 
 body {
