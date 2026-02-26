@@ -67,9 +67,20 @@ export function RevealMockup({ delay = 0 }: { delay?: number }) {
                         </div>
                     </div>
 
-                    <h3 className="text-xl font-semibold text-white mb-2">Your Match</h3>
-                    <div className="px-4 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-medium text-center">
-                        Minimalist Urban & Cozy Contemporary
+                    <h3 className="text-xl font-serif font-semibold text-white mb-2">Arjun S.</h3>
+                    <div className="px-3 py-1 mb-4 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-[10px] font-mono uppercase tracking-widest text-center">
+                        Match Report · 98% Compatible
+                    </div>
+
+                    <div className="w-full space-y-3 mt-2">
+                        <div className="bg-white/5 p-3 rounded-xl border border-white/5">
+                            <span className="text-[10px] text-white/40 font-mono uppercase block mb-1">Your Alter</span>
+                            <p className="text-xs text-white/80 leading-relaxed font-serif">&ldquo;Your person needs emotional presence above all else. Arjun leads with warmth, not ambition.&rdquo;</p>
+                        </div>
+                        <div className="bg-alter-purple/10 p-3 rounded-xl border border-alter-purple/20 ml-4">
+                            <span className="text-[10px] text-alter-lightpurple font-mono uppercase block mb-1">Their Alter</span>
+                            <p className="text-xs text-white/80 leading-relaxed font-serif">&ldquo;Arjun values deep listening and genuine connection above achievement. This one is rare.&rdquo;</p>
+                        </div>
                     </div>
 
                     {/* Little fade out effect at bottom */}

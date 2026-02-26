@@ -1,15 +1,15 @@
 "use client";
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ChevronRight, HeartHandshake, Shield, Sparkles, Network, Plus, BrainCircuit } from 'lucide-react';
-import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { HeartHandshake, Shield, BrainCircuit, Mic, Users } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ThemeToggle } from "@/components/theme-toggle";
 import dynamic from 'next/dynamic';
 import { AgentNetwork } from '@/components/agent-network';
-import { TrainingMockup } from '@/components/mockups/training-mockup';
-import { ScoutingMockup } from '@/components/mockups/scouting-mockup';
+import { InteractiveBackground } from '@/components/interactive-background';
 import { RevealMockup } from '@/components/mockups/reveal-mockup';
+import { TrainingMockup } from '@/components/mockups/training-mockup';
 
 const WaitlistForm = dynamic(() => import('@/components/waitlist-form').then(mod => mod.WaitlistForm), { ssr: false });
 
@@ -21,477 +21,569 @@ const agentLogs = [
   "Agent 042 shortlisted a potential match for tomorrow.",
 ];
 
+const NAV_SECTIONS = [
+  { id: 'your-alter', label: 'Your Alter' },
+  { id: 'the-reveal', label: 'The Reveal' },
+  { id: 'simulation', label: 'Network' },
+  { id: 'faq', label: 'FAQ' },
+];
+
 export default function Home() {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const [activeSection, setActiveSection] = useState('your-alter');
+  const [showPillNav, setShowPillNav] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroEl = document.getElementById('hero');
+      if (heroEl) {
+        const heroThreshold = heroEl.offsetTop + heroEl.offsetHeight * 0.4;
+        setShowPillNav(window.scrollY > heroThreshold);
+      }
+
+      for (const section of NAV_SECTIONS) {
+        const el = document.getElementById(section.id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 160 && rect.bottom >= 160) {
+            setActiveSection(section.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans overflow-hidden transition-colors duration-500 relative">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-sans overflow-x-hidden transition-colors duration-500 relative">
+      <InteractiveBackground />
 
-      {/* Background Agent Network - physically behind the floating container */}
-      <div className="fixed inset-0 z-0 opacity-60">
-        <AgentNetwork />
-      </div>
-
-      {/* Floating Pill Navigation */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-full glass border border-[var(--border)] shadow-[0_20px_40px_-20px_rgba(0,0,0,0.3)] flex items-center gap-8 transition-all hover:border-alter-purple/30">
+      {/* ── Main Nav Pill ── */}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-full glass border border-[var(--glass-border)] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4)] flex items-center gap-8 transition-all">
         <div className="flex items-center gap-2">
-          <Image
-            src="/images/logo-light.png"
-            alt="Alter Logo"
-            width={28}
-            height={28}
-            className="rounded-lg drop-shadow-[0_0_10px_rgba(255,191,51,0.5)] dark:hidden block"
-          />
-          <Image
-            src="/images/logo-dark.png"
-            alt="Alter Logo"
-            width={28}
-            height={28}
-            className="rounded-lg drop-shadow-[0_0_10px_rgba(115,69,230,0.5)] hidden dark:block"
-          />
+          <Image src="/images/logo-light.png" alt="Alter" width={26} height={26} className="rounded-lg dark:hidden block opacity-80" />
+          <Image src="/images/logo-dark.png" alt="Alter" width={26} height={26} className="rounded-lg hidden dark:block opacity-80" />
           <span className="font-bold text-lg tracking-tight">Alter</span>
         </div>
-
-        {/* Theme Toggle in Pill */}
-        <div className="pl-4 border-l border-black/10 dark:border-white/10">
+        <div className="pl-4 border-l border-white/20">
           <ThemeToggle />
         </div>
       </nav>
 
-      {/* Main Floating Workspace Container */}
-      <main className="relative z-10 pt-32 pb-8 px-4 md:px-8 w-full max-w-[1400px] mx-auto min-h-screen flex flex-col items-center">
+      {/* ── Section Pill Nav (Shopify Editions style) ── */}
+      <AnimatePresence>
+        {showPillNav && (
+          <motion.div
+            initial={{ y: -48, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -48, opacity: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed top-[5.5rem] left-1/2 -translate-x-1/2 z-[90] flex items-center gap-1.5 p-1.5 glass rounded-full border border-white/[0.08] shadow-[0_8px_40px_-8px_rgba(0,0,0,0.5)]"
+          >
+            {NAV_SECTIONS.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => scrollToSection(section.id)}
+                className={`px-5 py-2 rounded-full text-sm font-semibold font-sans tracking-tight transition-all duration-300 ${
+                  activeSection === section.id
+                    ? 'bg-white text-black shadow-md'
+                    : 'text-white/50 hover:text-white/90 hover:bg-white/[0.07]'
+                }`}
+              >
+                {section.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* The large glass canvas */}
-        <div className="w-full glass rounded-[2.5rem] md:rounded-[4rem] border border-[var(--border)] shadow-2xl overflow-hidden relative pb-10">
+      <main className="relative z-10 w-full flex flex-col">
 
-          {/* Subtle top glow within canvas */}
-          <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-white/10 to-transparent dark:from-white/5 pointer-events-none" />
+        {/* ══════════════════════════════════════════════════
+            SCENE I — HERO
+        ══════════════════════════════════════════════════ */}
+        <section id="hero" className="sticky top-0 w-full h-screen flex flex-col items-center justify-center text-center z-0">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/renaissance_hero_bg.png"
+              alt="Renaissance Landscape"
+              fill
+              className="object-cover object-center opacity-35 mix-blend-screen grayscale"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black" />
+          </div>
 
-          {/* Hero Section */}
-          <section className="relative flex flex-col items-center justify-center min-h-[70vh] text-center px-6 pt-20">
-            {/* Framer Motion Pulsing Orb - Now contained within canvas */}
+          <div className="relative z-10 w-full px-4 flex flex-col items-center justify-center h-full">
             <motion.div
-              style={{ y }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none opacity-40 z-0"
+              initial={{ opacity: 0, scale: 0.97, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center w-full"
             >
-              <div className="absolute inset-0 rounded-full bg-alter-purple blur-[100px] mix-blend-screen animate-pulse duration-3000"></div>
-              <div className="absolute inset-20 rounded-full bg-alter-lightpurple blur-[80px] mix-blend-screen opacity-50"></div>
+              {/* Eyebrow — Shopify Editions style */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.25 }}
+                className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full border border-white/[0.12] bg-white/[0.04] backdrop-blur-md text-white/60 text-xs font-mono tracking-[0.18em] uppercase mb-10"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-alter-gold animate-pulse" />
+                AI Matchmaking · The Alter Bureau · 2026
+              </motion.div>
+
+              <h1 className="text-[20vw] md:text-[13.5vw] leading-[0.76] tracking-tighter font-black font-sans uppercase text-white mix-blend-difference">
+                END OF<br />SWIPING.
+              </h1>
             </motion.div>
 
-            <div className="relative z-10 max-w-4xl space-y-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <span className="px-4 py-1.5 rounded-full border border-alter-purple/30 bg-alter-purple/10 text-alter-lightpurple text-sm font-medium tracking-wide mb-6 inline-block">
-                  iOS Exclusive
-                </span>
-                <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-b from-black to-black/60 dark:from-white dark:to-white/60">
-                  Dating is exhausting.<br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-alter-purple to-alter-lightpurple">So we built an AI Agent that does it for you.</span>
-                </h1>
-              </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.55 }}
+              className="mt-10 flex flex-col items-center gap-8 w-full max-w-lg"
+            >
+              <p className="text-lg md:text-2xl text-white/55 font-sans font-medium tracking-tight leading-relaxed">
+                A private, relentless matchmaking agent.<br />Working while you live your life.
+              </p>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-lg md:text-xl text-black/50 dark:text-white/50 max-w-2xl mx-auto"
-              >
-                Alter gives you a deeply intuitive AI Matchmaker that actually understands you. You live your life while your Agent goes out into the digital world, filtering out the noise, negotiating dealbreakers, and only introducing you to a real human when a profound, soul-level connection is found.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 z-10"
-              >
-                <div className="relative group inline-block">
-                  <a href="#" className="inline-block hover:opacity-80 transition-opacity">
-                    <Image
-                      src="/images/app-store-badge.svg"
-                      alt="Download on the App Store"
-                      width={150}
-                      height={50}
-                      className="h-[50px] w-auto"
-                    />
-                  </a>
-                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 min-w-max px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
-                    Soon available for Waitlisted Users
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black dark:bg-white rotate-45"></div>
-                  </div>
-                </div>
+              <div className="glass p-6 md:p-8 rounded-[2rem] w-full flex flex-col items-center gap-6 border border-white/[0.08]">
                 <WaitlistForm />
-              </motion.div>
-            </div>
-          </section>
-
-          {/* The Problem vs The Solution - NEW SECTION */}
-          <section className="py-20 -mx-6 px-6 relative z-20">
-            <div className="max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-
-                {/* The Old Way */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                  className="glass rounded-[2rem] p-8 md:p-10 border border-black/5 dark:border-white/5 relative overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 dark:bg-white/5 rounded-full blur-[40px] -mr-10 -mt-10"></div>
-                  <h3 className="text-xl font-mono text-black/40 dark:text-white/40 mb-6 uppercase tracking-widest">The Burnout</h3>
-                  <ul className="space-y-4 text-black/60 dark:text-white/60 text-lg leading-relaxed mix-blend-luminosity">
-                    <li className="flex items-start gap-4">
-                      <span className="opacity-50 mt-1 flex-shrink-0">✕</span>
-                      <div>
-                        Endless swiping through shallow, performative profiles built on just a few photos.
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-4">
-                      <span className="opacity-50 mt-1 flex-shrink-0">✕</span>
-                      <div>
-                        The mental exhaustion of starting over with &quot;hey, how was your weekend?&quot; 100 times.
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-4">
-                      <span className="opacity-50 mt-1 flex-shrink-0">✕</span>
-                      <div>
-                        Investing your time and emotional energy, only to hit a fundamental dealbreaker weeks later.
-                      </div>
-                    </li>
-                  </ul>
-                </motion.div>
-
-                {/* The Alter Way */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="glass rounded-[2rem] p-8 md:p-10 border border-alter-purple/20 bg-alter-purple/5 relative overflow-hidden shadow-[0_0_40px_rgba(115,69,230,0.1)]"
-                >
-                  <div className="absolute bottom-0 right-0 w-48 h-48 bg-alter-purple/10 rounded-full blur-[50px]"></div>
-                  <h3 className="text-xl font-mono text-alter-purple dark:text-alter-lightpurple mb-6 uppercase tracking-widest font-semibold">The Relief</h3>
-                  <ul className="space-y-4 text-black/80 dark:text-white/80 text-lg leading-relaxed relative z-10">
-                    <li className="flex items-start gap-4">
-                      <span className="text-alter-purple mt-1 flex-shrink-0">✓</span>
-                      <div>
-                        <strong>You live your life.</strong> Your personal Matchmaker does the searching, respectfully filtering out incompatible matches.
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-4">
-                      <span className="text-alter-purple mt-1 flex-shrink-0">✓</span>
-                      <div>
-                        <strong>Deep alignment, assured.</strong> Your Agent ensures core beliefs and attachment styles match before you ever say hello.
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-4">
-                      <span className="text-alter-purple mt-1 flex-shrink-0">✓</span>
-                      <div>
-                        <strong>Skip the small talk.</strong> Wake up to a hand-picked human connection, complete with a beautiful summary of exactly why you belong together.
-                      </div>
-                    </li>
-                  </ul>
-                </motion.div>
-
-              </div>
-            </div>
-          </section>
-
-
-
-          {/* Feature Bento Box */}
-          <section className="mb-40">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold tracking-tight mb-4">How Your Agent Works</h2>
-              <p className="text-black/50 dark:text-white/50 text-lg">It learns you. It searches for you. It matches you.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-              {/* Audio Interview Card */}
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="glass rounded-3xl p-10 relative overflow-hidden group border border-transparent hover:border-alter-purple/30 transition-all duration-500"
-              >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-alter-lightpurple/10 rounded-full blur-[60px] -mr-20 -mt-20 group-hover:bg-alter-lightpurple/20 transition-colors"></div>
-                <Sparkles className="w-10 h-10 text-alter-purple mb-6" />
-                <h3 className="text-2xl font-semibold mb-3">1. The Deep Dive</h3>
-                <p className="text-black/60 dark:text-white/60 leading-relaxed text-sm">
-                  <strong>Have a real, free-flowing conversation.</strong> Speak to your Agent like a close friend. It learns your quirks, your non-negotiables, and what truly makes you feel loved.
-                </p>
-              </motion.div>
-
-              {/* AI Dossier */}
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="glass rounded-3xl p-10 relative overflow-hidden group border border-transparent hover:border-alter-amber/30 transition-all duration-500"
-              >
-                <div className="absolute bottom-0 right-0 w-32 h-32 bg-alter-amber/10 rounded-full blur-[40px] group-hover:bg-alter-amber/20 transition-colors"></div>
-                <div className="w-10 h-10 rounded-full bg-alter-amber/10 dark:bg-alter-amber/20 flex items-center justify-center text-alter-amber mb-6 font-mono text-sm border border-alter-amber/30">
-                  {`{}`}
-                </div>
-                <h3 className="text-xl font-semibold mb-3">Your Digital Soul</h3>
-                <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed">
-                  Your voice, energy, and photos are safely transformed into a highly encrypted persona. This is how your Agent reliably represents your beautiful complexities to the world.
-                </p>
-              </motion.div>
-
-              {/* The Memory Vault */}
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="glass rounded-3xl p-10 relative overflow-hidden group md:col-span-1 border border-transparent hover:border-alter-green/30 transition-all duration-500"
-              >
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-alter-green/10 rounded-full blur-[50px] group-hover:bg-alter-green/20 transition-colors"></div>
-                <BrainCircuit className="w-10 h-10 text-alter-green mb-6 relative z-10" />
-                <h3 className="text-xl font-semibold mb-3 relative z-10">2. The Silent Search</h3>
-                <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed relative z-10">
-                  <strong>It advocates for you 24/7.</strong> Your Agent quietly goes on thousands of digital dates, fiercely protecting your boundaries and your time.
-                </p>
-              </motion.div>
-
-              {/* 11:11 PM Ritual */}
-              <motion.div
-                whileHover={{ y: -5 }}
-                className="glass rounded-3xl p-10 relative overflow-hidden group md:col-span-3 min-h-[300px] flex flex-col md:flex-row items-center gap-10 border border-transparent hover:border-alter-green/30 transition-all duration-500"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-alter-green/5 to-transparent"></div>
-                <div className="flex-1 relative z-10">
-                  <HeartHandshake className="w-10 h-10 text-alter-green mb-6" />
-                  <h3 className="text-3xl font-semibold mb-4">3. The Introduction</h3>
-                  <p className="text-black/60 dark:text-white/60 text-lg leading-relaxed max-w-2xl">
-                    <strong>When there is a spark, your Agent steps aside.</strong> Every night at 11:11 PM, if a deeply profound connection is verified, you are introduced to the real human—completely ready to go on that magical first date.
-                  </p>
-                </div>
-
-                {/* Visual Representation of two agents */}
-                <div className="flex-shrink-0 flex items-center gap-4 relative z-10 w-full md:w-auto justify-center">
-                  <div className="w-20 h-20 rounded-full border border-black/10 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-sm flex items-center justify-center font-mono text-black/50 dark:text-white/40">YOU</div>
-                  <div className="w-12 h-[1px] bg-gradient-to-r from-alter-purple/0 via-alter-purple to-alter-purple/0 relative">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-alter-purple rounded-full blur-[2px]"></div>
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" />
+                <div className="relative group inline-block">
+                  <button className="transition-transform hover:scale-[1.04] active:scale-95">
+                    <Image src="/images/app-store-badge.svg" alt="Download on the App Store" width={155} height={52} />
+                  </button>
+                  <div className="absolute -top-11 left-1/2 -translate-x-1/2 min-w-max px-3 py-1.5 bg-black/90 backdrop-blur-md border border-white/[0.1] text-white text-[11px] font-mono rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Coming soon.
                   </div>
-                  <div className="w-20 h-20 rounded-full border border-alter-green/30 bg-alter-green/10 backdrop-blur-sm flex items-center justify-center font-mono text-alter-green">THEM</div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Scroll cue */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.6 }}
+              className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+            >
+              <span className="text-white/25 text-[10px] font-mono tracking-[0.25em] uppercase">Scroll</span>
+              <motion.div
+                animate={{ y: [0, 7, 0] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                className="w-px h-9 bg-gradient-to-b from-white/25 to-transparent"
+              />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════════════
+            SCENE II — YOUR ALTER  (Feature Spotlight)
+        ══════════════════════════════════════════════════ */}
+        <section id="your-alter" className="sticky top-0 w-full min-h-screen bg-[#030303] z-10">
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <Image
+              src="/images/renaissance_vault_bg.png"
+              alt=""
+              fill
+              className="object-cover opacity-[0.12] mix-blend-screen grayscale"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-[#030303]/80 to-[#030303]" />
+          </div>
+
+          <div className="relative z-10 max-w-[88rem] mx-auto px-6 lg:px-14 pt-24 pb-20">
+            {/* Section label */}
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-white/25 font-mono text-[11px] tracking-[0.3em] uppercase">01</span>
+              <div className="h-px w-12 bg-white/15" />
+              <span className="text-alter-gold font-mono text-[11px] tracking-[0.3em] uppercase">Your Alter</span>
+            </div>
+
+            {/* Mega headline */}
+            <h2 className="text-[11vw] md:text-[7.5vw] leading-[0.82] font-black font-sans uppercase tracking-tighter text-white mb-14 lg:mb-20">
+              THE<br />SOUL WITHIN
+            </h2>
+
+            {/* ── Spotlight Grid ── */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 auto-rows-auto">
+
+              {/* Card A — Deep Dive (large, 7 cols) */}
+              <motion.div
+                initial={{ opacity: 0, y: 36 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.85 }}
+                className="lg:col-span-7 glass rounded-[2.5rem] p-10 lg:p-14 flex flex-col justify-between min-h-[420px] border border-white/[0.05] relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-alter-gold/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-10">
+                    <div className="w-14 h-14 rounded-2xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center">
+                      <Mic className="w-7 h-7 text-white/70" />
+                    </div>
+                    <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-white/30 px-3 py-1.5 border border-white/[0.1] rounded-full">
+                      New
+                    </span>
+                  </div>
+                  <h3 className="text-[6vw] md:text-[4vw] lg:text-[3vw] font-black tracking-tighter font-sans text-white uppercase leading-[0.88] mb-6">
+                    Deep<br />Dive
+                  </h3>
+                  <p className="text-white/45 font-sans font-medium leading-relaxed text-base md:text-lg max-w-sm">
+                    A real, fluid voice conversation. No forms. Alter listens to your tone, hesitations, and passions — naturally mapping who you are and what you truly need.
+                  </p>
+                </div>
+                <div className="relative z-10 mt-10 pt-6 border-t border-white/[0.05] flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-alter-gold animate-pulse" />
+                  <span className="text-white/30 font-mono text-[11px] tracking-[0.2em] uppercase">AI Voice Interview</span>
+                </div>
+              </motion.div>
+
+              {/* Card B — Phone Mockup (5 cols) */}
+              <motion.div
+                initial={{ opacity: 0, y: 36 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.85, delay: 0.1 }}
+                className="lg:col-span-5 glass rounded-[2.5rem] flex items-center justify-center min-h-[420px] border border-white/[0.05] relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-alter-purple/[0.12] via-transparent to-alter-gold/[0.04]" />
+                <div className="relative z-10 py-10">
+                  <TrainingMockup delay={0.4} />
+                </div>
+              </motion.div>
+
+              {/* Card C — Silent Protocol (8 cols) */}
+              <motion.div
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.75, delay: 0.15 }}
+                className="lg:col-span-8 glass rounded-[2rem] p-8 lg:p-10 flex flex-col justify-between min-h-[280px] border border-white/[0.05] relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.015] to-transparent" />
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-7">
+                    <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-white/70" />
+                    </div>
+                  </div>
+                  <h3 className="text-3xl lg:text-4xl font-black tracking-tighter font-sans text-white uppercase mb-4">
+                    Silent Protocol
+                  </h3>
+                  <p className="text-white/45 font-sans font-medium leading-relaxed text-base max-w-xl">
+                    While you&apos;re busy, your Alter connects with thousands of profiles simultaneously — predicting friction, evaluating chemistry, and filtering noise before you ever see a name.
+                  </p>
+                </div>
+                <div className="relative z-10 mt-7 pt-5 border-t border-white/[0.05] flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-white/40 animate-ping" />
+                    <span className="text-white/30 font-mono text-[11px] tracking-[0.2em] uppercase">Running Now</span>
+                  </div>
+                  <span className="text-white/15 font-mono text-[11px] tracking-wider">1,000+ evaluations/sec</span>
+                </div>
+              </motion.div>
+
+              {/* Card D — Always Learning (4 cols) */}
+              <motion.div
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.75, delay: 0.22 }}
+                className="lg:col-span-4 glass rounded-[2rem] p-8 flex flex-col justify-between min-h-[280px] border border-white/[0.05] relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.015] to-transparent" />
+                <div className="relative z-10">
+                  <div className="mb-7">
+                    <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center">
+                      <BrainCircuit className="w-6 h-6 text-white/70" />
+                    </div>
+                  </div>
+                  <h3 className="text-3xl font-black tracking-tighter font-sans text-white uppercase mb-4">
+                    Always<br />Learning
+                  </h3>
+                  <p className="text-white/45 font-sans font-medium leading-relaxed text-sm">
+                    Your Matchmaker sharpens with every decision you make. When something doesn&apos;t fit, it listens.
+                  </p>
+                </div>
+                <div className="relative z-10 mt-6 pt-4 border-t border-white/[0.05]">
+                  <span className="text-white/25 font-mono text-[11px] tracking-[0.2em] uppercase">Adaptive Intelligence</span>
                 </div>
               </motion.div>
 
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* App in Action - iPhone Mockups */}
-          <section className="mb-40 relative z-10 px-6">
-            <div className="text-center mb-20">
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">The App in Action</h2>
-              <p className="text-black/50 dark:text-white/50 text-lg">A peek into the autonomous ecosystem.</p>
+        {/* ══════════════════════════════════════════════════
+            SCENE III — THE REVEAL
+        ══════════════════════════════════════════════════ */}
+        <section id="the-reveal" className="sticky top-0 w-full min-h-screen bg-[#060606] z-20 border-t border-white/[0.04]">
+          <div className="relative z-10 max-w-[88rem] mx-auto px-6 lg:px-14 pt-24 pb-20">
+
+            {/* Section label */}
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-white/25 font-mono text-[11px] tracking-[0.3em] uppercase">02</span>
+              <div className="h-px w-12 bg-white/15" />
+              <span className="text-alter-gold font-mono text-[11px] tracking-[0.3em] uppercase">The Reveal</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 max-w-6xl mx-auto">
-              {/* Mockup 1: Training */}
+            <h2 className="text-[11vw] md:text-[7.5vw] leading-[0.82] font-black font-sans uppercase tracking-tighter text-white mb-14 lg:mb-20">
+              ONE MATCH.<br />EVERY DAY.
+            </h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+              {/* Phone Mockup — large left card */}
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -36 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="flex flex-col items-center gap-6"
+                transition={{ duration: 0.9 }}
+                className="lg:col-span-5 glass rounded-[2.5rem] flex items-center justify-center min-h-[580px] border border-white/[0.05] relative overflow-hidden"
               >
-                <div className="relative group p-4 -mx-4 md:mx-0">
-                  <TrainingMockup delay={0.2} />
-                </div>
-                <div className="text-center space-y-2">
-                  <h3 className="text-xl font-semibold">1. Deep Connection</h3>
-                  <p className="text-sm text-black/50 dark:text-white/40 max-w-[250px]">
-                    Speak naturally to your AI so it learns the real, unfiltered you.
-                  </p>
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-transparent to-purple-900/10" />
+                <div className="relative z-10 py-12">
+                  <RevealMockup delay={0.25} />
                 </div>
               </motion.div>
 
-              {/* Mockup 2: Scouting */}
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="flex flex-col items-center gap-6 md:-mt-12"
-              >
-                <div className="relative group p-4 -mx-4 md:mx-0">
-                  <ScoutingMockup delay={0.4} />
-                </div>
-                <div className="text-center space-y-2">
-                  <h3 className="text-xl font-semibold text-alter-purple">2. The Silent Search</h3>
-                  <p className="text-sm text-black/50 dark:text-white/40 max-w-[250px]">
-                    Watch your Agent advocate for you in real-time, respectfully filtering out bad matches.
-                  </p>
-                </div>
-              </motion.div>
+              {/* Right column — features */}
+              <div className="lg:col-span-7 flex flex-col gap-4">
 
-              {/* Mockup 3: Matching */}
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-col items-center gap-6"
-              >
-                <div className="relative group p-4 -mx-4 md:mx-0">
-                  <RevealMockup delay={0.6} />
-                </div>
-                <div className="text-center space-y-2">
-                  <h3 className="text-xl font-semibold">3. The Magical Reveal</h3>
-                  <p className="text-sm text-black/50 dark:text-white/40 max-w-[250px]">
-                    Wake up to a beautiful breakdown of exactly why you belong together.
-                  </p>
-                </div>
-              </motion.div>
+                {/* The Dossier */}
+                <motion.div
+                  initial={{ opacity: 0, x: 36 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.85, delay: 0.1 }}
+                  className="flex-1 glass rounded-[2rem] p-10 border border-white/[0.05] relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-alter-gold/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-8">
+                      <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center">
+                        <HeartHandshake className="w-6 h-6 text-white/70" />
+                      </div>
+                      <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-alter-gold/50 px-3 py-1.5 border border-alter-gold/20 rounded-full bg-alter-gold/[0.05]">
+                        Daily
+                      </span>
+                    </div>
+                    <h3 className="text-4xl lg:text-5xl font-black tracking-tighter font-sans text-white uppercase leading-none mb-5">
+                      The Dossier
+                    </h3>
+                    <p className="text-white/45 font-sans font-medium leading-relaxed text-base max-w-lg">
+                      Wake up to a hand-picked human connection. A beautifully synthesized, brutally honest explanation of exactly why you two belong together — delivered every morning at 11:11.
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Your Network */}
+                <motion.div
+                  initial={{ opacity: 0, x: 36 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.85, delay: 0.18 }}
+                  className="glass rounded-[2rem] p-8 border border-white/[0.05] relative overflow-hidden"
+                >
+                  <div className="flex items-start gap-5 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center flex-shrink-0">
+                      <Users className="w-6 h-6 text-white/70" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black tracking-tighter font-sans text-white uppercase mb-2">Your Network</h3>
+                      <p className="text-white/45 font-sans font-medium leading-relaxed text-sm">
+                        Every Alter in the ecosystem scouts on behalf of their human. Yours never sleeps.
+                      </p>
+                    </div>
+                  </div>
+                  {/* Live agent dots */}
+                  <div className="flex items-center gap-2 flex-wrap mt-2">
+                    {Array.from({ length: 16 }).map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="w-2 h-2 rounded-full bg-alter-gold/50"
+                        animate={{ opacity: [0.15, 1, 0.15] }}
+                        transition={{ duration: 2.5, delay: i * 0.12, repeat: Infinity }}
+                      />
+                    ))}
+                    <span className="text-white/25 font-mono text-[10px] ml-1 tracking-wider">+∞ active alters</span>
+                  </div>
+                </motion.div>
+
+              </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* Privacy Section */}
-          <section className="text-center max-w-2xl mx-auto py-20 pb-32">
-            <Shield className="w-12 h-12 mx-auto text-black/30 dark:text-white/30 mb-6" />
-            <h2 className="text-3xl font-semibold mb-6">Your Heart, Safely Guarded</h2>
-            <p className="text-black/50 dark:text-white/50 text-lg leading-relaxed">
-              Alter values intimacy and intuition. Your deepest thoughts stay strictly between you and your Matchmaker. No public profiles to be judged. No superficial swiping. Just an intensely private sanctuary that brings you love when the time is right.
+        {/* ══════════════════════════════════════════════════
+            SCENE IV — SIMULATION  (Network Graph)
+        ══════════════════════════════════════════════════ */}
+        <section id="simulation" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#040404] px-4 z-30 border-t border-white/[0.04]">
+
+          <div className="text-center mb-14 max-w-5xl mx-auto w-full">
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <span className="text-white/25 font-mono text-[11px] tracking-[0.3em] uppercase">03</span>
+              <div className="h-px w-12 bg-white/15" />
+              <span className="text-alter-gold font-mono text-[11px] tracking-[0.3em] uppercase">The Network</span>
+            </div>
+            <h2 className="text-[15vw] md:text-[10vw] leading-[0.8] font-black font-sans uppercase tracking-tighter text-white mb-7">
+              SIMULATION
+            </h2>
+            <p className="text-lg md:text-xl text-white/40 font-sans font-medium tracking-tight max-w-2xl mx-auto leading-relaxed">
+              While you sleep, your Alter negotiates millions of permutations to find the singular person meant for you.
             </p>
-          </section>
+          </div>
 
-          {/* The Vision Tease: Beyond Romance */}
-          <section className="mb-40 relative z-10">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-alter-purple/5 to-transparent rounded-[3rem] -z-10"></div>
+          <div className="w-full max-w-7xl mx-auto h-[62vh] rounded-[2.5rem] glass border border-white/[0.06] relative shadow-2xl overflow-visible">
+            <div className="absolute inset-0 z-10 p-4 overflow-visible">
+              <AgentNetwork />
+            </div>
+            <div className="absolute top-5 left-5 z-20 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 bg-black/60 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/[0.06] flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-alter-gold animate-pulse" />
+              Agent Network
+            </div>
+          </div>
 
-            <div className="glass rounded-[3rem] p-8 md:p-16 border border-black/10 dark:border-white/10 relative overflow-hidden">
-              {/* Background elements */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-alter-purple to-transparent opacity-50"></div>
-              <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-alter-lightpurple/20 blur-[100px] rounded-full"></div>
+        </section>
 
-              <div className="max-w-3xl mx-auto text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-black/60 dark:text-white/60 text-sm font-medium mb-8">
-                  <Network size={14} className="text-alter-purple" />
-                  The Future of Connection
-                </div>
+        {/* ══════════════════════════════════════════════════
+            SCENE V — MECHANICS / FAQ
+        ══════════════════════════════════════════════════ */}
+        <section id="faq" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center py-28 px-6 bg-[#020202] z-40 border-t border-white/[0.04]">
+          <div className="relative z-10 max-w-5xl mx-auto w-full">
 
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                  Not just for <span className="text-transparent bg-clip-text bg-gradient-to-r from-alter-purple to-alter-lightpurple">romance</span>.
-                </h2>
-
-                <p className="text-black/60 dark:text-white/60 text-lg md:text-xl leading-relaxed mb-10">
-                  While Alter is currently optimized for finding your partner, the underlying matching engine is built to understand human connection. Soon, your Agent will be able to scout for friends, co-founders, and collaborators with the same precision.
-                </p>
+            <div className="mb-16 lg:mb-20">
+              <div className="flex items-center gap-4 mb-8">
+                <span className="text-white/25 font-mono text-[11px] tracking-[0.3em] uppercase">04</span>
+                <div className="h-px w-12 bg-white/15" />
+                <span className="text-alter-gold font-mono text-[11px] tracking-[0.3em] uppercase">Questions</span>
               </div>
-            </div>
-          </section>
-
-          {/* FAQ Section */}
-          <section className="mb-40 relative z-10 max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">How it works.</h2>
-              <p className="text-black/50 dark:text-white/50 text-lg">Common questions about the Alter experience.</p>
+              <h2 className="text-[13vw] md:text-[8vw] leading-[0.82] font-black font-sans uppercase tracking-tighter text-white">
+                MECHANICS
+              </h2>
             </div>
 
-            <div className="space-y-4">
-              {/* FAQ 1 */}
-              <details className="group glass rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden open:border-alter-purple/30 transition-colors duration-300">
-                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-lg hover:text-alter-purple transition-colors">
-                  Is my data actually private?
-                  <Plus className="w-5 h-5 text-black/40 dark:text-white/40 group-open:rotate-45 group-open:text-alter-purple transition-transform duration-300" />
-                </summary>
-                <div className="px-6 pb-6 text-black/60 dark:text-white/60 leading-relaxed text-sm">
-                  Yes. Unlike traditional apps that host public profiles for the world to see, Alter has zero public-facing content. Your highly personal onboarding and interactions are processed securely on your device. The global network only exchanges encrypted representations of your &quot;vibe&quot;.
-                </div>
-              </details>
-
-              {/* FAQ 2 */}
-              <details className="group glass rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden open:border-alter-purple/30 transition-colors duration-300">
-                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-lg hover:text-alter-purple transition-colors">
-                  Do I have to chat with my Agent every day?
-                  <Plus className="w-5 h-5 text-black/40 dark:text-white/40 group-open:rotate-45 group-open:text-alter-purple transition-transform duration-300" />
-                </summary>
-                <div className="px-6 pb-6 text-black/60 dark:text-white/60 leading-relaxed text-sm">
-                  Only once. During onboarding, you spend 5 minutes speaking to your Agent so it can learn your personality. After that, your Agent becomes your personal matchmaker, scouting in the wild for you in the background. You only open the app when it finds a highly compatible human match.
-                </div>
-              </details>
-
-              {/* FAQ 3 */}
-              <details className="group glass rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden open:border-alter-purple/30 transition-colors duration-300">
-                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-lg hover:text-alter-purple transition-colors">
-                  How does the compatibility matching actually work?
-                  <Plus className="w-5 h-5 text-black/40 dark:text-white/40 group-open:rotate-45 group-open:text-alter-purple transition-transform duration-300" />
-                </summary>
-                <div className="px-6 pb-6 text-black/60 dark:text-white/60 leading-relaxed text-sm">
-                  The Alter Matchmaker uses a proprietary orchestration model. We fuse high-dimensional semantic analysis (personality, aesthetics, tone) with deep relational algorithms. The exact weighting mechanism is continuously learning based on what makes a successful, long-lasting connection.
-                </div>
-              </details>
+            <div className="grid gap-3 max-w-4xl">
+              {[
+                {
+                  q: "How does the Deep Dive interview work?",
+                  a: "It's an immersive voice conversation. No swiping, no typing. You speak naturally, and Alter listens to the nuances — your tone, hesitations, and passions — mapping your psychological profile and core values."
+                },
+                {
+                  q: "What is 'Silent Search Protocol'?",
+                  a: "Once your profile is built, it enters our secure network. Your Alter autonomously evaluates thousands of potential matches every second, running deep compatibility checks based on your attachment style, values, and dealbreakers — all without you lifting a finger."
+                },
+                {
+                  q: "How many matches will I receive?",
+                  a: "Alter is designed for precision, not volume. You will receive very few matches, but each Dossier represents a mathematically and psychologically validated high-probability connection."
+                },
+                {
+                  q: "Is my data private?",
+                  a: "Absolutely. All deep dive audio is processed securely to build your profile, then immediately discarded. Your Alter works entirely on your behalf — your personal details are never exposed during the matching process."
+                }
+              ].map((faq, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.07 }}
+                  className="glass group rounded-2xl border border-white/[0.06] transition-all duration-300 hover:border-white/[0.16]"
+                >
+                  <div className="p-7 lg:p-9">
+                    <h4 className="text-xl font-black font-sans tracking-tight text-white mb-3 flex items-center gap-5 uppercase">
+                      <span className="text-white/20 font-mono text-base shrink-0">0{i + 1}</span>
+                      {faq.q}
+                    </h4>
+                    <p className="text-white/45 font-sans font-medium text-base leading-relaxed pl-[3.25rem] max-w-3xl">
+                      {faq.a}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* Final CTA */}
-          <section className="mb-20 text-center">
-            <h2 className="text-4xl font-bold tracking-tight mb-8">Ready to stop swiping?</h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <div className="relative group inline-block">
-                <a href="#" className="inline-block hover:opacity-80 transition-opacity">
-                  <Image
-                    src="/images/app-store-badge.svg"
-                    alt="Download on the App Store"
-                    width={150}
-                    height={50}
-                    className="h-[50px] w-auto"
-                  />
-                </a>
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 min-w-max px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
-                  Soon available for Waitlisted Users
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black dark:bg-white rotate-45"></div>
-                </div>
-              </div>
+        {/* ══════════════════════════════════════════════════
+            SCENE VI — COVENANT  (Final CTA)
+        ══════════════════════════════════════════════════ */}
+        <section id="covenant" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center text-center bg-[#030303] z-50 border-t border-white/[0.04] px-6 relative overflow-hidden">
+          {/* Ambient glow */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div className="absolute top-1/3 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-alter-purple/[0.07] rounded-full blur-[140px]" />
+            <div className="absolute bottom-1/3 right-1/3 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-alter-gold/[0.04] rounded-full blur-[120px]" />
+          </div>
+
+          <div className="relative z-10 max-w-4xl mx-auto w-full">
+            <div className="flex items-center justify-center gap-4 mb-10">
+              <div className="h-px w-16 bg-white/[0.12]" />
+              <span className="text-alter-gold font-mono text-[11px] tracking-[0.3em] uppercase">Join the Waitlist</span>
+              <div className="h-px w-16 bg-white/[0.12]" />
+            </div>
+
+            <h2 className="text-[14vw] md:text-[10vw] leading-[0.8] font-black font-sans uppercase tracking-tighter text-white mb-4 drop-shadow-2xl">
+              THE TIME<br />IS NOW.
+            </h2>
+
+            <p className="text-white/35 font-sans text-lg font-medium tracking-tight mb-12">
+              The revolution starts with your name on a list.
+            </p>
+
+            <div className="glass p-8 md:p-10 rounded-[2.5rem] w-full max-w-md mx-auto border border-white/[0.06]">
               <WaitlistForm />
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.1] to-transparent my-6" />
+              <div className="relative group inline-block">
+                <button className="transition-transform hover:scale-[1.04] active:scale-95">
+                  <Image src="/images/app-store-badge.svg" alt="Download on the App Store" width={155} height={52} />
+                </button>
+                <div className="absolute -top-11 left-1/2 -translate-x-1/2 min-w-max px-3 py-1.5 bg-black/90 backdrop-blur-md border border-white/[0.1] text-white text-[11px] font-mono rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  Coming soon.
+                </div>
+              </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-        </div> {/* End of massive glass canvas */}
       </main>
 
-      {/* Footer */}
-      <footer className="mt-8 mb-24 text-center text-black/40 dark:text-white/30 text-sm font-mono relative z-10">
-        <p>© 2026 Alter Matchmaking. iOS Exclusive.</p>
+      {/* ── Footer ── */}
+      <footer className="py-8 text-center text-white/20 text-[11px] font-mono relative z-[60] bg-black border-t border-white/[0.04] tracking-[0.15em] uppercase">
+        <div className="flex items-center justify-center gap-3 mb-2.5">
+          <div className="w-8 h-px bg-white/10" />
+          <Image src="/images/logo-dark.png" alt="Alter" width={16} height={16} className="opacity-25" />
+          <div className="w-8 h-px bg-white/10" />
+        </div>
+        <p>© 2026 The Alter Bureau · All Rights Reserved</p>
       </footer>
 
-      {/* Continuous Ticker at bottom of viewport */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 py-3 glass border-t border-[var(--border)] overflow-hidden">
-        <div className="flex font-mono text-[13px] tracking-wider min-w-full">
-          <div className="flex w-max animate-marquee shrink-0">
-            {[...agentLogs, ...agentLogs].map((log, i) => {
-              const isMatch = log.includes("harmony") || log.includes("shortlisted");
-              const isReject = log.includes("rejected");
-              const color = isMatch ? 'text-alter-green' : isReject ? 'text-alter-red' : 'text-alter-amber';
-
-              return (
-                <div key={i} className="flex items-center gap-3 px-8 text-black/70 dark:text-white/70 whitespace-nowrap">
-                  <span className={`${color} w-1.5 h-1.5 rounded-full animate-pulse shadow-[0_0_8px_currentColor]`}></span>
-                  <span>{log}</span>
-                </div>
-              )
-            })}
-          </div>
-
-          <div className="flex w-max animate-marquee shrink-0" aria-hidden="true">
-            {[...agentLogs, ...agentLogs].map((log, i) => {
-              const isMatch = log.includes("harmony") || log.includes("shortlisted");
-              const isReject = log.includes("rejected");
-              const color = isMatch ? 'text-alter-green' : isReject ? 'text-alter-red' : 'text-alter-amber';
-
-              return (
-                <div key={i} className="flex items-center gap-3 px-8 text-black/70 dark:text-white/70 whitespace-nowrap">
-                  <span className={`${color} w-1.5 h-1.5 rounded-full animate-pulse shadow-[0_0_8px_currentColor]`}></span>
-                  <span>{log}</span>
-                </div>
-              )
-            })}
-          </div>
+      {/* ── Ticker ── */}
+      <div className="w-full py-3 bg-black overflow-hidden relative z-[60] font-mono text-[10px] uppercase tracking-[0.28em] text-white/20 flex items-center border-t border-white/[0.04]">
+        <div className="flex w-max animate-marquee shrink-0 items-center">
+          {[...agentLogs, ...agentLogs].map((log, i) => (
+            <div key={i} className="flex items-center gap-4 px-10 whitespace-nowrap">
+              <span className="text-alter-gold/35">✦</span>
+              <span>{log}</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex w-max animate-marquee shrink-0 items-center" aria-hidden="true">
+          {[...agentLogs, ...agentLogs].map((log, i) => (
+            <div key={i} className="flex items-center gap-4 px-10 whitespace-nowrap">
+              <span className="text-alter-gold/35">✦</span>
+              <span>{log}</span>
+            </div>
+          ))}
         </div>
       </div>
-
     </div>
   );
 }

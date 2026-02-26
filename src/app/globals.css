@@ -2,15 +2,21 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-alter-bg: var(--background);
   --color-alter-purple: #7345E6;
   --color-alter-lightpurple: #A673FF;
-  --color-alter-deeppurple: #331A66;
-  --color-alter-green: #4DD980;
-  --color-alter-red: #FF4C4C;
-  --color-alter-amber: #FFBF33;
+
+  /* Deep Shopify & Victorian Palette */
+  --color-alter-burgundy: #4A0E17;
+  --color-alter-wine: #6B1522;
+  --color-alter-gold: #D4AF37;
+  --color-alter-charcoal: #1A1A1A;
+  --color-alter-ivory: #FDFBF7;
+  --color-alter-parchment: #EFECE6;
+  --color-alter-stone: #D1CEC7;
+
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
+  --font-serif: var(--font-cormorant);
 
   --animate-marquee: marquee 35s linear infinite;
 
@@ -26,22 +32,28 @@
 }
 
 :root {
-  --background: #FFFFFF;
-  /* Pristine Light */
-  --foreground: #0A0A0A;
-  --glass: rgb(255 255 255 / 0.8);
-  --border: rgb(0 0 0 / 0.05);
-  --glass-hover: rgb(255 255 255 / 0.95);
+  --background: #F1EFED;
+  --foreground: #333333;
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(0, 0, 0, 0.07);
+  --border: rgba(0, 0, 0, 0.08);
+  --glass-hover: rgba(255, 255, 255, 0.85);
+  /* Canvas bg for WebGL scenes */
+  --canvas-bg: #F1EFED;
 }
 
 .dark {
-  --background: #03000A;
-  /* Cinematic Deep Black with a hint of purple */
-  --foreground: #F5F5F5;
-  --glass: rgb(15 10 30 / 0.5);
-  /* Dark tinted glass */
-  --border: rgb(255 255 255 / 0.08);
-  --glass-hover: rgb(25 15 45 / 0.6);
+  --background: #000000;
+  --foreground: #FFFFFF;
+  --glass: rgba(20, 20, 25, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.1);
+  --glass-hover: rgba(40, 40, 50, 0.65);
+  --canvas-bg: #0C0808;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
@@ -51,9 +63,16 @@ body {
   overflow-x: hidden;
 }
 
-/* Glassmorphism utilities */
+/* Glassmorphism utilities - Official iOS Ultra-thin Material */
 @utility glass {
   background-color: var(--glass);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  /* Light mode: delicate elevation shadow; Dark mode: deep shadow */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
 }
