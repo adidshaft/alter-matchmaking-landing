@@ -40,13 +40,12 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          forcedTheme="dark"
           disableTransitionOnChange
         >
           <LenisProvider>
             {children}
-            <Toaster position="bottom-center" theme="system" />
+            <Toaster position="bottom-center" theme="dark" />
             <Analytics />
           </LenisProvider>
         </ThemeProvider>
