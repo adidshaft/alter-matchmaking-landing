@@ -1,34 +1,46 @@
 "use client";
 
-import { motion } from 'framer-motion';
-import { HeartHandshake, Shield, BrainCircuit, Mic, Users } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { HeartHandshake, Shield, BrainCircuit, Mic, Users, User } from 'lucide-react';
 import React from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { AgentNetwork } from '@/components/agent-network';
 import { InteractiveBackground } from '@/components/interactive-background';
-import { RevealMockup } from '@/components/mockups/reveal-mockup';
-import { TrainingMockup } from '@/components/mockups/training-mockup';
 
 const WaitlistForm = dynamic(() => import('@/components/waitlist-form').then(mod => mod.WaitlistForm), { ssr: false });
 
+import { RevealMockup } from "@/components/mockups/reveal-mockup";
+import { TrainingMockup } from "@/components/mockups/training-mockup";
+import { ScoutingMockup } from "@/components/mockups/scouting-mockup";
+
 const agentLogs = [
   "Agent 004 rejected a match: Vibe mismatch.",
-  "Agent 092 found a 98% Vedic harmony.",
+  "Agent 092 found a 98% compatibility score.",
   "Agent 011 negotiating boundaries on nightlife.",
   "Agent 077 analyzing a new profile's aesthetic.",
   "Agent 042 shortlisted a potential match for tomorrow.",
 ];
 
 export default function Home() {
+  const { scrollY } = useScroll();
+
+  // Parallax layers
+  const heroBgY = useTransform(scrollY, [0, 900], ["0px", "140px"]);
+  const heroFloatRY = useTransform(scrollY, [0, 900], ["0px", "-90px"]);
+  const heroFloatLY = useTransform(scrollY, [0, 900], ["0px", "60px"]);
+  const alterBgY = useTransform(scrollY, [400, 2200], ["0px", "80px"]);
+  const revealFrontY = useTransform(scrollY, [1200, 3200], ["0px", "-70px"]);
+  const revealBackY = useTransform(scrollY, [1200, 3200], ["0px", "-30px"]);
+
   return (
     <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden relative">
       <InteractiveBackground />
 
       {/* ── Wordmark ── */}
-      <header className="fixed top-7 inset-x-0 flex justify-center z-[100] pointer-events-none select-none">
-        <span className="font-mono text-[10px] font-medium tracking-[0.65em] text-white/30 uppercase">
-          alter
+      <header className="fixed top-8 inset-x-0 flex justify-center z-[100] pointer-events-none select-none">
+        <span className="font-mono text-2xl md:text-3xl font-light tracking-[0.65em] text-white/80 lowercase pl-[0.65em]">
+          a l t e r
         </span>
       </header>
 
@@ -37,18 +49,46 @@ export default function Home() {
         {/* ══════════════════════════════════════════════════
             SCENE I — HERO
         ══════════════════════════════════════════════════ */}
-        <section id="hero" className="sticky top-0 w-full h-screen flex flex-col items-center justify-center text-center z-0">
-          <div className="absolute inset-0 z-0">
+        <section id="hero" className="sticky top-0 w-full h-screen flex flex-col items-center justify-center text-center z-0 overflow-hidden">
+
+          {/* Background parallax */}
+          <motion.div style={{ y: heroBgY }} className="absolute inset-[-15%] z-0">
             <Image
               src="/images/renaissance_hero_bg.png"
-              alt="Renaissance Landscape"
+              alt=""
               fill
-              className="object-cover object-center opacity-35 mix-blend-screen grayscale"
+              className="object-cover object-center opacity-30 mix-blend-screen grayscale"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black" />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black z-[1]" />
+
+          {/* Center glow */}
+          <div className="absolute inset-0 z-[1] pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-alter-purple/[0.08] rounded-full blur-[200px]" />
           </div>
 
+          {/* Floating mockup — right */}
+          <motion.div
+            style={{ y: heroFloatRY }}
+            initial={{ opacity: 0, x: 80, rotate: 6 }}
+            animate={{ opacity: 1, x: 0, rotate: 4 }}
+            transition={{ duration: 1.6, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="hidden xl:block absolute right-[5%] top-1/2 -translate-y-[55%] z-10 drop-shadow-[0_60px_120px_rgba(115,69,230,0.4)]"
+          >
+            <div className="rounded-[1rem] overflow-hidden ring-1 ring-white/[0.12] -rotate-6">
+              <Image
+                src="/images/renaissance-cupid-full.png"
+                alt="Renaissance Cupid"
+                width={520}
+                height={520}
+                className="w-[280px] h-auto object-cover"
+              />
+            </div>
+          </motion.div>
+
+
+          {/* Hero content */}
           <div className="relative z-10 w-full px-4 flex flex-col items-center justify-center h-full">
             <motion.div
               initial={{ opacity: 0, scale: 0.97, y: 24 }}
@@ -78,8 +118,8 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.55 }}
               className="mt-10 flex flex-col items-center gap-8 w-full max-w-lg"
             >
-              <p className="text-lg md:text-2xl text-white/45 font-sans font-medium tracking-tight leading-relaxed">
-                A private, relentless matchmaking agent.<br />Working while you live your life.
+              <p className="text-xl md:text-2xl text-white/50 font-serif italic tracking-tight leading-relaxed">
+                A private, relentless AI Agent matchmaking.
               </p>
 
               <div className="glass p-6 md:p-8 rounded-[2rem] w-full flex flex-col items-center gap-6 border border-white/[0.07]">
@@ -100,15 +140,11 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.6 }}
-              className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+              transition={{ duration: 1, delay: 1.5 }}
+              className="absolute bottom-8 lg:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
-              <span className="text-white/20 text-[10px] font-mono tracking-[0.25em] uppercase">Scroll</span>
-              <motion.div
-                animate={{ y: [0, 7, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                className="w-px h-9 bg-gradient-to-b from-white/20 to-transparent"
-              />
+              <span className="text-white/50 text-[10px] font-mono tracking-[0.25em] uppercase">Scroll</span>
+              <div className="w-[1px] h-12 bg-gradient-to-b from-white/30 to-transparent" />
             </motion.div>
           </div>
         </section>
@@ -117,25 +153,29 @@ export default function Home() {
             SCENE II — YOUR ALTER
         ══════════════════════════════════════════════════ */}
         <section id="your-alter" className="sticky top-0 w-full min-h-screen bg-[#030303] z-10">
-          <div className="absolute inset-0 z-0 pointer-events-none">
+          <motion.div style={{ y: alterBgY }} className="absolute inset-[-10%] z-0 pointer-events-none">
             <Image
               src="/images/renaissance_vault_bg.png"
               alt=""
               fill
-              className="object-cover opacity-[0.12] mix-blend-screen grayscale"
+              className="object-cover opacity-[0.10] mix-blend-screen grayscale"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-[#030303]/80 to-[#030303]" />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-[#030303]/80 to-[#030303] z-[1]" />
+          <div className="absolute inset-0 z-[1] pointer-events-none">
+            <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-alter-gold/[0.025] rounded-full blur-[180px]" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-alter-purple/[0.04] rounded-full blur-[160px]" />
           </div>
 
-          <div className="relative z-10 max-w-[88rem] mx-auto px-6 lg:px-14 pt-24 pb-20">
-            <div className="flex items-center gap-4 mb-8">
-              <span className="text-white/20 font-mono text-[10px] tracking-[0.3em] uppercase">01</span>
+          <div className="relative z-10 max-w-[88rem] mx-auto px-6 lg:px-14 pt-32 pb-24">
+            <div className="flex items-center gap-4 mb-10">
+              <span className="text-white/40 font-mono text-[10px] tracking-[0.3em] uppercase">01</span>
               <div className="h-px w-12 bg-white/[0.12]" />
-              <span className="text-alter-gold font-mono text-[10px] tracking-[0.3em] uppercase">Your Alter</span>
+              <span className="text-alter-gold font-mono text-[10px] tracking-[0.3em] uppercase">The Soul Within</span>
             </div>
 
-            <h2 className="text-[11vw] md:text-[7.5vw] leading-[0.82] font-black font-sans uppercase tracking-tighter text-white mb-14 lg:mb-20">
-              THE<br />SOUL WITHIN
+            <h2 className="text-[11vw] md:text-[7.5vw] leading-[0.82] font-serif italic tracking-tight text-white mb-14 lg:mb-20">
+              The<br />Soul Within
             </h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 auto-rows-auto">
@@ -152,13 +192,13 @@ export default function Home() {
                 <div className="relative z-10">
                   <div className="flex items-start justify-between mb-10">
                     <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.07] flex items-center justify-center">
-                      <Mic className="w-7 h-7 text-white/60" />
+                      <Mic className="w-7 h-7 text-white/80" />
                     </div>
-                    <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-white/25 px-3 py-1.5 border border-white/[0.08] rounded-full">
+                    <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-white/50 px-3 py-1.5 border border-white/[0.15] rounded-full">
                       New
                     </span>
                   </div>
-                  <h3 className="text-[6vw] md:text-[4vw] lg:text-[3vw] font-black tracking-tighter font-sans text-white uppercase leading-[0.88] mb-6">
+                  <h3 className="text-[6vw] md:text-[4vw] lg:text-[3vw] font-serif italic tracking-tight text-white leading-[0.9] mb-6">
                     Deep<br />Dive
                   </h3>
                   <p className="text-white/40 font-sans font-medium leading-relaxed text-base md:text-lg max-w-sm">
@@ -167,22 +207,42 @@ export default function Home() {
                 </div>
                 <div className="relative z-10 mt-10 pt-6 border-t border-white/[0.05] flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-alter-gold animate-pulse" />
-                  <span className="text-white/25 font-mono text-[10px] tracking-[0.2em] uppercase">AI Voice Interview</span>
+                  <span className="text-alter-gold font-mono text-[10px] tracking-[0.2em] uppercase opacity-100">AI Voice Interview</span>
                 </div>
               </motion.div>
 
-              {/* Card B — Phone Mockup */}
+              {/* Card B — Voice abstraction */}
               <motion.div
                 initial={{ opacity: 0, y: 36 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.85, delay: 0.1 }}
-                className="lg:col-span-5 glass rounded-[2.5rem] flex items-center justify-center min-h-[420px] border border-white/[0.05] relative overflow-hidden"
+                className="lg:col-span-5 glass rounded-[2.5rem] flex flex-col items-center justify-center min-h-[420px] border border-white/[0.05] relative overflow-hidden group"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-alter-purple/[0.1] via-transparent to-alter-gold/[0.03]" />
-                <div className="relative z-10 py-10">
-                  <TrainingMockup delay={0.4} />
+                <div className="absolute inset-0 bg-gradient-to-br from-alter-purple/[0.18] via-transparent to-alter-gold/[0.03]" />
+                <div className="absolute inset-0 bg-alter-gold/5 blur-[100px] rounded-full scale-150 animate-[pulse_4s_ease-in-out_Infinity]" />
+
+                <div className="relative z-10 w-full flex items-center justify-center">
+                  <div className="w-48 h-48 relative flex items-center justify-center">
+                    {/* Concentric expanding voice rings */}
+                    <div className="absolute inset-0 rounded-full border border-alter-gold/20 scale-150 animate-[ping_4s_cubic-bezier(0,0,0.2,1)_Infinity]" />
+                    <div className="absolute inset-0 rounded-full border border-alter-purple/30 scale-110 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_Infinity_0.5s]" />
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#120D26] to-black border border-white/10 z-10 shadow-[0_0_50px_rgba(166,115,255,0.3)] flex items-center justify-center">
+                      <div className="flex items-center gap-1.5 opacity-90">
+                        {[1, 2, 3, 2, 1].map((h, i) => (
+                          <motion.div
+                            key={i}
+                            animate={{ height: [`${h * 8}px`, `${h * 16}px`, `${h * 8}px`] }}
+                            transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.15 }}
+                            className="w-1.5 rounded-full bg-alter-lightpurple"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
+                <div className="absolute bottom-8 z-10 italic font-serif text-white/50 tracking-wider">Listening...</div>
               </motion.div>
 
               {/* Card C — Silent Protocol */}
@@ -200,7 +260,7 @@ export default function Home() {
                       <Shield className="w-6 h-6 text-white/60" />
                     </div>
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-black tracking-tighter font-sans text-white uppercase mb-4">
+                  <h3 className="text-3xl lg:text-4xl font-serif italic tracking-tight text-white mb-4">
                     Silent Protocol
                   </h3>
                   <p className="text-white/40 font-sans font-medium leading-relaxed text-base max-w-xl">
@@ -210,7 +270,7 @@ export default function Home() {
                 <div className="relative z-10 mt-7 pt-5 border-t border-white/[0.05] flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-white/30 animate-ping" />
-                    <span className="text-white/25 font-mono text-[10px] tracking-[0.2em] uppercase">Running Now</span>
+                    <span className="text-alter-gold/80 font-mono text-[10px] tracking-[0.2em] uppercase">Running Now</span>
                   </div>
                   <span className="text-white/[0.12] font-mono text-[10px] tracking-wider">1,000+ evaluations/sec</span>
                 </div>
@@ -231,15 +291,15 @@ export default function Home() {
                       <BrainCircuit className="w-6 h-6 text-white/60" />
                     </div>
                   </div>
-                  <h3 className="text-3xl font-black tracking-tighter font-sans text-white uppercase mb-4">
+                  <h3 className="text-3xl font-serif italic tracking-tight text-white mb-4">
                     Always<br />Learning
                   </h3>
                   <p className="text-white/40 font-sans font-medium leading-relaxed text-sm">
-                    Your Matchmaker sharpens with every decision you make. When something doesn&apos;t fit, it listens.
+                    Your Alter sharpens with every decision you make. When something doesn&apos;t fit, it listens.
                   </p>
                 </div>
                 <div className="relative z-10 mt-6 pt-4 border-t border-white/[0.05]">
-                  <span className="text-white/20 font-mono text-[10px] tracking-[0.2em] uppercase">Adaptive Intelligence</span>
+                  <span className="text-alter-gold font-mono text-[10px] tracking-[0.2em] uppercase opacity-100">Adaptive Intelligence</span>
                 </div>
               </motion.div>
 
@@ -251,31 +311,71 @@ export default function Home() {
             SCENE III — THE REVEAL
         ══════════════════════════════════════════════════ */}
         <section id="the-reveal" className="sticky top-0 w-full min-h-screen bg-[#060606] z-20 border-t border-white/[0.04]">
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div className="absolute bottom-0 left-1/4 w-[700px] h-[500px] bg-indigo-900/[0.14] rounded-full blur-[180px]" />
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-alter-purple/[0.07] rounded-full blur-[140px]" />
+          </div>
+
           <div className="relative z-10 max-w-[88rem] mx-auto px-6 lg:px-14 pt-24 pb-20">
 
             <div className="flex items-center gap-4 mb-8">
-              <span className="text-white/20 font-mono text-[10px] tracking-[0.3em] uppercase">02</span>
+              <span className="text-white/40 font-mono text-[10px] tracking-[0.3em] uppercase">02</span>
               <div className="h-px w-12 bg-white/[0.12]" />
               <span className="text-alter-gold font-mono text-[10px] tracking-[0.3em] uppercase">The Reveal</span>
             </div>
 
-            <h2 className="text-[11vw] md:text-[7.5vw] leading-[0.82] font-black font-sans uppercase tracking-tighter text-white mb-14 lg:mb-20">
-              ONE MATCH.<br />EVERY DAY.
+            <h2 className="text-[11vw] md:text-[7.5vw] leading-[0.82] font-serif italic tracking-tight text-white mb-14 lg:mb-20">
+              One Match.<br />Every Day.
             </h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
 
-              {/* Phone Mockup */}
+              {/* Left Column - Abstract UI Representation */}
               <motion.div
                 initial={{ opacity: 0, x: -36 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.9 }}
-                className="lg:col-span-5 glass rounded-[2.5rem] flex items-center justify-center min-h-[580px] border border-white/[0.05] relative overflow-hidden"
+                className="lg:col-span-5 flex flex-col items-center justify-center min-h-[580px] relative glass rounded-[2.5rem] border border-white/[0.05] overflow-hidden group"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-transparent to-purple-900/10" />
-                <div className="relative z-10 py-12">
-                  <RevealMockup delay={0.25} />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#060606] via-transparent to-[#060606] z-10" />
+                <div className="absolute inset-0 bg-alter-purple/5 blur-[100px] rounded-full scale-150 animate-[pulse_5s_ease-in-out_Infinity]" />
+                <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.03] mix-blend-overlay z-0" />
+
+                {/* Simulated Data Stream Background */}
+                <div className="absolute inset-0 flex flex-col justify-center px-10 gap-4 opacity-30 z-0">
+                  {[...Array(6)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
+                      className="flex items-center justify-between border-b border-white/[0.08] pb-4"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white/10" />
+                        <div className="space-y-2">
+                          <div className="w-24 h-2 rounded bg-white/10" />
+                          <div className="w-16 h-1.5 rounded bg-white/5" />
+                        </div>
+                      </div>
+                      <div className="text-alter-gold/60 font-mono text-[10px]">98%</div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Central "The Match" Element */}
+                <div className="relative z-20 flex flex-col items-center justify-center text-center mt-8">
+                  <div className="w-40 h-40 rounded-full bg-gradient-to-br from-[#1A1435] to-[#0A0713] border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center mb-6 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(166,115,255,0.4),transparent_60%)]" />
+                    <User className="w-10 h-10 text-white/80 mb-2 relative z-10" />
+                    <span className="text-[10px] uppercase tracking-[0.3em] font-mono text-alter-gold relative z-10">Match</span>
+                  </div>
+                  <h3 className="text-2xl font-serif italic text-white tracking-tight mb-2">11:11 Match Found</h3>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-white/60 text-[10px] uppercase font-mono tracking-wider">Connection Verified</span>
+                  </div>
                 </div>
               </motion.div>
 
@@ -300,7 +400,7 @@ export default function Home() {
                         Daily
                       </span>
                     </div>
-                    <h3 className="text-4xl lg:text-5xl font-black tracking-tighter font-sans text-white uppercase leading-none mb-5">
+                    <h3 className="text-4xl lg:text-5xl font-serif italic tracking-tight text-white leading-none mb-5">
                       The Dossier
                     </h3>
                     <p className="text-white/40 font-sans font-medium leading-relaxed text-base max-w-lg">
@@ -322,7 +422,7 @@ export default function Home() {
                       <Users className="w-6 h-6 text-white/60" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-black tracking-tighter font-sans text-white uppercase mb-2">Your Network</h3>
+                      <h3 className="text-2xl font-serif italic tracking-tight text-white mb-2">Your Network</h3>
                       <p className="text-white/40 font-sans font-medium leading-relaxed text-sm">
                         Every Alter in the ecosystem scouts on behalf of their human. Yours never sleeps.
                       </p>
@@ -337,7 +437,7 @@ export default function Home() {
                         transition={{ duration: 2.5, delay: i * 0.12, repeat: Infinity }}
                       />
                     ))}
-                    <span className="text-white/20 font-mono text-[10px] ml-1 tracking-wider">+∞ active alters</span>
+                    <span className="text-alter-gold/80 font-mono text-[10px] ml-1 tracking-wider">+∞ active alters</span>
                   </div>
                 </motion.div>
 
@@ -353,19 +453,19 @@ export default function Home() {
 
           <div className="text-center mb-14 max-w-5xl mx-auto w-full">
             <div className="flex items-center justify-center gap-4 mb-8">
-              <span className="text-white/20 font-mono text-[10px] tracking-[0.3em] uppercase">03</span>
+              <span className="text-white/40 font-mono text-[10px] tracking-[0.3em] uppercase">03</span>
               <div className="h-px w-12 bg-white/[0.12]" />
-              <span className="text-alter-gold font-mono text-[10px] tracking-[0.3em] uppercase">The Network</span>
+              <span className="text-alter-gold font-mono text-[10px] tracking-[0.3em] uppercase">The Architecture</span>
             </div>
-            <h2 className="text-[15vw] md:text-[10vw] leading-[0.8] font-black font-sans uppercase tracking-tighter text-white mb-7">
-              SIMULATION
+            <h2 className="text-[15vw] md:text-[10vw] leading-[0.8] font-serif italic tracking-tight text-white mb-7">
+              Simulation
             </h2>
             <p className="text-lg md:text-xl text-white/35 font-sans font-medium tracking-tight max-w-2xl mx-auto leading-relaxed">
               While you sleep, your Alter negotiates millions of permutations to find the singular person meant for you.
             </p>
           </div>
 
-          <div className="w-full max-w-7xl mx-auto h-[62vh] rounded-[2.5rem] glass border border-white/[0.06] relative shadow-2xl overflow-visible">
+          <div className="w-full max-w-7xl mx-auto h-[62vh] relative overflow-visible">
             <div className="absolute inset-0 z-10 p-4 overflow-visible">
               <AgentNetwork />
             </div>
@@ -380,17 +480,30 @@ export default function Home() {
         {/* ══════════════════════════════════════════════════
             SCENE V — MECHANICS
         ══════════════════════════════════════════════════ */}
-        <section id="faq" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center py-28 px-6 bg-[#020202] z-40 border-t border-white/[0.04]">
+        <section id="faq" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center py-28 px-6 bg-[#020202] z-40 border-t border-white/[0.04] relative">
+
+          {/* New Generated Art Asset */}
+          <div className="absolute inset-0 z-0 pointer-events-none opacity-20 mix-blend-screen grayscale-[50%]">
+            <Image
+              src="/images/renaissance_connection.png"
+              alt="Renaissance Connection"
+              fill
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#020202] via-transparent to-[#020202]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-transparent to-[#020202]" />
+          </div>
+
           <div className="relative z-10 max-w-5xl mx-auto w-full">
 
             <div className="mb-16 lg:mb-20">
               <div className="flex items-center gap-4 mb-8">
-                <span className="text-white/20 font-mono text-[10px] tracking-[0.3em] uppercase">04</span>
+                <span className="text-white/40 font-mono text-[10px] tracking-[0.3em] uppercase">04</span>
                 <div className="h-px w-12 bg-white/[0.12]" />
                 <span className="text-alter-gold font-mono text-[10px] tracking-[0.3em] uppercase">Questions</span>
               </div>
-              <h2 className="text-[13vw] md:text-[8vw] leading-[0.82] font-black font-sans uppercase tracking-tighter text-white">
-                MECHANICS
+              <h2 className="text-[13vw] md:text-[8vw] leading-[0.82] font-serif italic tracking-tight text-white">
+                Mechanics
               </h2>
             </div>
 
@@ -401,7 +514,7 @@ export default function Home() {
                   a: "An immersive voice conversation. No swiping, no typing. You speak naturally, and Alter listens to your tone, hesitations, and passions — mapping your psychological profile and core values."
                 },
                 {
-                  q: "What is 'Silent Search Protocol'?",
+                  q: "What is the Silent Search Protocol?",
                   a: "Once your profile is built, it enters our secure network. Your Alter autonomously evaluates thousands of potential matches every second, running deep compatibility checks based on your attachment style, values, and dealbreakers — all without you lifting a finger."
                 },
                 {
@@ -441,7 +554,7 @@ export default function Home() {
         ══════════════════════════════════════════════════ */}
         <section id="covenant" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center text-center bg-[#030303] z-50 border-t border-white/[0.04] px-6 relative overflow-hidden">
           <div className="absolute inset-0 z-0 pointer-events-none">
-            <div className="absolute top-1/3 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-alter-purple/[0.06] rounded-full blur-[140px]" />
+            <div className="absolute top-1/3 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-alter-purple/[0.07] rounded-full blur-[160px]" />
             <div className="absolute bottom-1/3 right-1/3 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-alter-gold/[0.03] rounded-full blur-[120px]" />
           </div>
 
@@ -452,12 +565,12 @@ export default function Home() {
               <div className="h-px w-16 bg-white/[0.1]" />
             </div>
 
-            <h2 className="text-[14vw] md:text-[10vw] leading-[0.8] font-black font-sans uppercase tracking-tighter text-white mb-4">
-              THE TIME<br />IS NOW.
+            <h2 className="text-[14vw] md:text-[10vw] leading-[0.8] font-serif italic tracking-tight text-white mb-4">
+              The Time<br />Is Now.
             </h2>
 
             <p className="text-white/30 font-sans text-lg font-medium tracking-tight mb-12">
-              The revolution starts with your name on a list.
+              The renaissance starts with you.
             </p>
 
             <div className="glass p-8 md:p-10 rounded-[2.5rem] w-full max-w-md mx-auto border border-white/[0.06]">

@@ -14,7 +14,7 @@ export function PhoneMockup({ children, className = "", delay = 0 }: PhoneMockup
         <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay }}
             className={`relative group p-3 glass rounded-[3.5rem] border border-black/5 dark:border-white/5 bg-white/5 backdrop-blur-3xl shadow-2xl transition hover:scale-[1.02] duration-500 w-[300px] h-[600px] flex-shrink-0 mx-auto ${className}`}
         >

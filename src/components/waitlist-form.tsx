@@ -40,25 +40,25 @@ export function WaitlistForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex w-full sm:w-auto relative max-w-xs">
+        <form onSubmit={handleSubmit} className="flex w-full sm:w-auto relative max-w-sm rounded-full bg-white/5 border border-white/10 p-1.5 focus-within:border-white/30 transition-colors shadow-2xl">
             <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Join the Waitlist..."
+                placeholder="Enter your email"
                 disabled={isSubmitting}
                 required
-                className="w-full px-6 py-4 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/30 focus:outline-none focus:border-alter-purple transition-colors disabled:opacity-50"
+                className="w-full px-5 py-3.5 rounded-full bg-transparent text-white placeholder:text-white/40 focus:outline-none transition-colors disabled:opacity-50 font-sans text-sm"
             />
             <button
                 type="submit"
                 disabled={isSubmitting || !email}
-                className="absolute right-2 top-2 bottom-2 bg-alter-purple rounded-full hover:bg-alter-lightpurple transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center w-[36px] h-[36px]"
+                className="min-w-[120px] bg-white text-black font-semibold rounded-full hover:bg-white/90 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center px-4 py-2 text-sm shadow-[0_0_20px_rgba(255,255,255,0.3)]"
             >
                 {isSubmitting ? (
-                    <Loader2 size={16} className="animate-spin text-white" />
+                    <Loader2 size={16} className="animate-spin text-black" />
                 ) : (
-                    <ChevronRight size={16} className="text-white" />
+                    "Join Waitlist"
                 )}
             </button>
         </form>
