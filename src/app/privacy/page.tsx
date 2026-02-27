@@ -143,8 +143,8 @@ export default function PrivacyPolicy() {
                     <p>
                         For any privacy-related questions, requests, or concerns, contact us at:
                         <br /><br />
-                        <strong>Email:</strong> privacy@kyokasuigetsu.xyz<br />
-                        <strong>Website:</strong> alter.kyokasuigetsu.xyz/support
+                        <strong>Email:</strong> adidshaft@kyokasuigetsu.xyz<br />
+                        <strong>Website:</strong> alter.kyokasuigetsu.xyz
                     </p>
 
                 </article>
