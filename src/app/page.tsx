@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { HeartHandshake, Shield, BrainCircuit, Mic, Users, User } from 'lucide-react';
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { AgentNetwork } from '@/components/agent-network';
 import { InteractiveBackground } from '@/components/interactive-background';
@@ -591,13 +592,21 @@ export default function Home() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="py-8 text-center text-white/[0.18] text-[10px] font-mono relative z-[60] bg-black border-t border-white/[0.04] tracking-[0.18em] uppercase">
-        <div className="flex items-center justify-center gap-3 mb-2.5">
+      <footer className="pt-12 pb-8 flex flex-col items-center justify-center text-center text-white/[0.18] text-[10px] font-mono relative z-[60] bg-black border-t border-white/[0.04] tracking-[0.18em] uppercase gap-5">
+
+        <div className="flex items-center justify-center gap-3">
           <div className="w-8 h-px bg-white/[0.08]" />
           <Image src="/images/logo-dark.png" alt="Alter" width={14} height={14} className="opacity-20" />
           <div className="w-8 h-px bg-white/[0.08]" />
         </div>
-        <p>© 2026 The Alter Bureau · All Rights Reserved</p>
+
+        <div className="flex items-center gap-6 text-white/40 font-sans tracking-wide capitalize text-xs">
+          <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+          <span className="text-white/[0.08]">|</span>
+          <Link href="/support" className="hover:text-white transition-colors">Support & Feedback</Link>
+        </div>
+
+        <p className="mt-2 text-[9px] opacity-60 font-mono tracking-[0.18em] uppercase">© 2026 The Alter Bureau · All Rights Reserved</p>
       </footer>
 
       {/* ── Ticker ── */}
