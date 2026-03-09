@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { AgentNetwork } from '@/components/agent-network';
-import { InteractiveBackground } from '@/components/interactive-background';
+import { ScrollVideoBackground } from '@/components/scroll-video-background';
 
 const WaitlistForm = dynamic(() => import('@/components/waitlist-form').then(mod => mod.WaitlistForm), { ssr: false });
 
@@ -36,7 +36,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden relative">
-      <InteractiveBackground />
+      <ScrollVideoBackground />
 
       {/* ── Wordmark ── */}
       <header className="fixed top-8 inset-x-0 flex justify-center z-[100] pointer-events-none select-none">
@@ -50,19 +50,7 @@ export default function Home() {
         {/* ══════════════════════════════════════════════════
             SCENE I — HERO
         ══════════════════════════════════════════════════ */}
-        <section id="hero" className="sticky top-0 w-full h-screen flex flex-col items-center justify-center text-center z-0 overflow-hidden">
-
-          {/* Background parallax */}
-          <motion.div style={{ y: heroBgY }} className="absolute inset-[-15%] z-0">
-            <Image
-              src="/images/renaissance_hero_bg.png"
-              alt=""
-              fill
-              className="object-cover object-center opacity-30 mix-blend-screen grayscale"
-              priority
-            />
-          </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black z-[1]" />
+        <section id="hero" className="relative w-full min-h-screen flex flex-col items-center justify-center text-center z-0 overflow-hidden pt-20">
 
           {/* Center glow */}
           <div className="absolute inset-0 z-[1] pointer-events-none">
@@ -153,16 +141,7 @@ export default function Home() {
         {/* ══════════════════════════════════════════════════
             SCENE II — YOUR ALTER
         ══════════════════════════════════════════════════ */}
-        <section id="your-alter" className="sticky top-0 w-full min-h-screen bg-[#030303] z-10">
-          <motion.div style={{ y: alterBgY }} className="absolute inset-[-10%] z-0 pointer-events-none">
-            <Image
-              src="/images/renaissance_vault_bg.png"
-              alt=""
-              fill
-              className="object-cover opacity-[0.10] mix-blend-screen grayscale"
-            />
-          </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-[#030303]/80 to-[#030303] z-[1]" />
+        <section id="your-alter" className="relative w-full min-h-screen z-10">
           <div className="absolute inset-0 z-[1] pointer-events-none">
             <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-alter-gold/[0.025] rounded-full blur-[180px]" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-alter-purple/[0.04] rounded-full blur-[160px]" />
@@ -311,7 +290,7 @@ export default function Home() {
         {/* ══════════════════════════════════════════════════
             SCENE III — THE REVEAL
         ══════════════════════════════════════════════════ */}
-        <section id="the-reveal" className="sticky top-0 w-full min-h-screen bg-[#060606] z-20 border-t border-white/[0.04]">
+        <section id="the-reveal" className="relative w-full min-h-screen z-20 border-t border-white/[0.04]">
           <div className="absolute inset-0 z-0 pointer-events-none">
             <div className="absolute bottom-0 left-1/4 w-[700px] h-[500px] bg-indigo-900/[0.14] rounded-full blur-[180px]" />
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-alter-purple/[0.07] rounded-full blur-[140px]" />
@@ -450,7 +429,7 @@ export default function Home() {
         {/* ══════════════════════════════════════════════════
             SCENE IV — SIMULATION
         ══════════════════════════════════════════════════ */}
-        <section id="simulation" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#040404] px-4 z-30 border-t border-white/[0.04]">
+        <section id="simulation" className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 px-4 z-30 border-t border-white/[0.04]">
 
           <div className="text-center mb-14 max-w-5xl mx-auto w-full">
             <div className="flex items-center justify-center gap-4 mb-8">
@@ -481,19 +460,7 @@ export default function Home() {
         {/* ══════════════════════════════════════════════════
             SCENE V — MECHANICS
         ══════════════════════════════════════════════════ */}
-        <section id="faq" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center py-28 px-6 bg-[#020202] z-40 border-t border-white/[0.04] relative">
-
-          {/* New Generated Art Asset */}
-          <div className="absolute inset-0 z-0 pointer-events-none opacity-20 mix-blend-screen grayscale-[50%]">
-            <Image
-              src="/images/renaissance_connection.png"
-              alt="Renaissance Connection"
-              fill
-              className="object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#020202] via-transparent to-[#020202]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-transparent to-[#020202]" />
-          </div>
+        <section id="faq" className="relative w-full min-h-screen flex flex-col items-center justify-center py-28 px-6 z-40 border-t border-white/[0.04] relative">
 
           <div className="relative z-10 max-w-5xl mx-auto w-full">
 
@@ -553,7 +520,7 @@ export default function Home() {
         {/* ══════════════════════════════════════════════════
             SCENE VI — COVENANT
         ══════════════════════════════════════════════════ */}
-        <section id="covenant" className="sticky top-0 w-full min-h-screen flex flex-col items-center justify-center text-center bg-[#030303] z-50 border-t border-white/[0.04] px-6 relative overflow-hidden">
+        <section id="covenant" className="relative w-full min-h-screen flex flex-col items-center justify-center text-center z-50 border-t border-white/[0.04] px-6 relative overflow-hidden bg-black/50">
           <div className="absolute inset-0 z-0 pointer-events-none">
             <div className="absolute top-1/3 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-alter-purple/[0.07] rounded-full blur-[160px]" />
             <div className="absolute bottom-1/3 right-1/3 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-alter-gold/[0.03] rounded-full blur-[120px]" />

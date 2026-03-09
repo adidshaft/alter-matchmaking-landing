@@ -34,13 +34,14 @@
 :root {
   --background: #000000;
   --foreground: #FFFFFF;
-  --glass: rgba(20, 20, 25, 0.45);
+  --glass: rgba(20, 20, 25, 0.75);
   --glass-border: rgba(255, 255, 255, 0.07);
   --border: rgba(255, 255, 255, 0.07);
   --canvas-bg: #0C0808;
 }
 
-html, body {
+html,
+body {
   background: #000000;
   color: #FFFFFF;
   font-family: var(--font-sans), sans-serif;
