@@ -65,6 +65,7 @@ export default async function OpenGraphImage({
   const name = cleanText(snapshot?.full_name) ?? "Someone";
   const archetype = cleanText(snapshot?.archetype_name) ?? "Persona Share";
   const emoji = cleanText(snapshot?.archetype_emoji) ?? "✨";
+  const heading = `Is Alter right about ${name}?`;
   const keywords = (snapshot?.vibe_keywords ?? [])
     .map((keyword) => cleanText(keyword))
     .filter((keyword): keyword is string => Boolean(keyword))
@@ -142,12 +143,13 @@ export default async function OpenGraphImage({
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                 <div
                   style={{
+                    display: "flex",
                     fontSize: 36,
                     lineHeight: 1.1,
                     color: "rgba(237, 230, 255, 0.92)",
                   }}
                 >
-                  Is Alter right about {name}?
+                  {heading}
                 </div>
                 <div
                   style={{
