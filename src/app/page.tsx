@@ -108,7 +108,7 @@ export default function Home() {
               className="mt-10 flex flex-col items-center gap-8 w-full max-w-lg"
             >
               <p className="text-xl md:text-2xl text-white/50 font-serif italic tracking-tight leading-relaxed">
-                A private, relentless AI Agent matchmaking.
+                A relentless AI Agent matchmaking.
               </p>
 
               <div className="glass p-6 md:p-8 rounded-[2rem] w-full flex flex-col items-center gap-6 border border-white/[0.07]">
@@ -384,7 +384,7 @@ export default function Home() {
                       The Dossier
                     </h3>
                     <p className="text-white/40 font-sans font-medium leading-relaxed text-base max-w-lg">
-                      Wake up to a hand-picked human connection. A beautifully synthesized, brutally honest explanation of exactly why you two belong together — delivered every morning at 11:11.
+                      Wake up to a hand-picked human connection. A beautifully synthesized, brutally honest explanation of exactly why you two belong together — delivered every morning at 11:11. Share your dossier with friends to get their feedback and second opinions.
                     </p>
                   </div>
                 </motion.div>
@@ -490,8 +490,8 @@ export default function Home() {
                   a: "Alter is designed for precision, not volume. You will receive very few matches, but each Dossier represents a mathematically and psychologically validated high-probability connection."
                 },
                 {
-                  q: "Is my data private?",
-                  a: "Absolutely. All deep dive audio is processed securely to build your profile, then immediately discarded. Your Alter works entirely on your behalf — your personal details are never exposed during the matching process."
+                  q: "What are SLOW and FAST modes?",
+                  a: "Alter adapts to your pace. SLOW mode curates one high-quality match per day at 11:11, focusing on deep compatibility. FAST mode accelerates the process, bringing you compatible connections on demand for spontaneous chemistry."
                 }
               ].map((faq, i) => (
                 <motion.div

@@ -24,8 +24,20 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://alter.kyokasuigetsu.xyz"),
   title: "Alter | AI Agent Matchmaker",
   description: "Agents over swiping. Let your AI Agent do the scouting.",
+  openGraph: {
+    title: "Alter | AI Agent Matchmaker",
+    description: "Agents over swiping. Let your AI Agent do the scouting.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Alter Preview" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Alter | AI Agent Matchmaker",
+    description: "Agents over swiping. Let your AI Agent do the scouting.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
